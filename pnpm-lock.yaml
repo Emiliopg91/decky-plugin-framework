@@ -30,6 +30,9 @@ devDependencies:
   '@types/react-router':
     specifier: 5.1.18
     version: 5.1.18
+  '@types/uuid':
+    specifier: ^9.0.8
+    version: 9.0.8
   commitizen:
     specifier: ^4.2.4
     version: 4.2.4(@types/node@20.12.7)(typescript@4.9.5)
@@ -37,8 +40,8 @@ devDependencies:
     specifier: ^3.25.0
     version: 3.25.0
   husky:
-    specifier: ^8.0.1
-    version: 8.0.1
+    specifier: ^8.0.3
+    version: 8.0.3
   import-sort-style-module:
     specifier: ^6.0.0
     version: 6.0.0
@@ -1341,6 +1344,10 @@ packages:
 
   /@types/stack-utils@2.0.3:
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
+    dev: true
+
+  /@types/uuid@9.0.8:
+    resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
     dev: true
 
   /@types/yargs-parser@21.0.3:
@@ -3111,8 +3118,8 @@ packages:
     engines: {node: '>=10.17.0'}
     dev: true
 
-  /husky@8.0.1:
-    resolution: {integrity: sha512-xs7/chUH/CKdOCs7Zy0Aev9e/dKOMZf3K1Az1nar3tzlv0jfqnYtu235bstsWTmXOR0EfINrPa97yy4Lz6RiKw==}
+  /husky@8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true

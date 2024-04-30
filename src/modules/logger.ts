@@ -48,7 +48,7 @@ export class Logger {
     private static currentLevel = LogLevel.INFO;
 
     private static async loadLogLevel() {
-        Logger.currentLevel = LogLevel[(await import("./configuration")).Configuration.getEntry("log_level", LogLevel[Logger.currentLevel]) as keyof typeof LogLevel];
+        Logger.currentLevel = LogLevel[(await import("./settings")).Settings.getEntry("log_level", LogLevel[Logger.currentLevel]) as keyof typeof LogLevel];
     }
 
     /**
@@ -126,4 +126,3 @@ export class Logger {
         Logger.log(LogLevel.ERROR, ...args);
     }
 }
-export default Logger;

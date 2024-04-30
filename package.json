@@ -1,6 +1,6 @@
 {
   "name": "decky-plugin-framework",
-  "version": "1.0.0",
+  "version": "1.1.14",
   "description": "Decky plugin common library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,14 +12,19 @@
     "docs": "typedoc --theme wiki-js --tsconfig ./tsconfig.json src/**/*",
     "test": "echo 'No tests for now!'",
     "prepare": "husky install",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "publish": "git add . && git commit -am \"Ready for new version\" &&npm version patch && pnpm run build && npm publish"
   },
   "author": "Emiliopg91",
   "license": "LGPL-2.1",
-  "bugs": {
-    "url": ""
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Emiliopg91/decky-plugin-framework.git"
   },
-  "homepage": "",
+  "bugs": {
+    "url": "https://github.com/Emiliopg91/decky-plugin-framework/issues"
+  },
+  "homepage": "https://github.com/Emiliopg91/decky-plugin-framework#readme",
   "config": {
     "commitizen": {
       "path": "@commitlint/cz-commitlint"
@@ -35,7 +40,8 @@
     "@types/react": "16.14.0",
     "@types/react-router": "5.1.18",
     "commitizen": "^4.2.4",
-    "husky": "^8.0.1",
+    "decky-frontend-lib": "^3.25.0",
+    "husky": "^8.0.3",
     "import-sort-style-module": "^6.0.0",
     "jest": "^27.5.1",
     "minimist": "^1.2.6",
@@ -48,8 +54,7 @@
     "typedoc-plugin-mdn-links": "^2.0.0",
     "typedoc-plugin-missing-exports": "^1.0.0",
     "typedoc-wikijs-theme": "^1.0.5",
-    "typescript": "^4.9.5",
-    "decky-frontend-lib": "^3.25.0"
+    "typescript": "^4.9.5"
   },
   "dependencies": {
     "react-icons": "^4.12.0"
