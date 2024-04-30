@@ -13,7 +13,7 @@
     "test": "echo 'No tests for now!'",
     "prepare": "husky install",
     "commit": "git-cz",
-    "publish": "git add . && git commit -am \"Ready for new version\" &&npm version patch && pnpm run build && npm publish"
+    "publish": "git add . && git commit -am \"Ready for new version\" && git push && npm version patch && pnpm run build && npm publish"
   },
   "author": "Emiliopg91",
   "license": "LGPL-2.1",
