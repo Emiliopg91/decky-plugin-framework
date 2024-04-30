@@ -19,11 +19,7 @@ export class Settings {
     private static configuration: Record<string, string> = {}
 
     public static async initialize() {
-        Settings.configuration = {}
-        const data = await Backend.backend_call<{}, string[][]>("get_config", {});
-        data.forEach((e) => {
-            Settings.configuration[e[0]] = e[1];
-        });
+        Settings.configuration =  await Backend.backend_call<{}, any>("get_config", {});
         Logger.info("Loaded configuration from file: " + JSON.stringify(Settings.configuration));
         Settings.notifyChanges();
     }
