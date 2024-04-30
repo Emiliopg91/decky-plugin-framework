@@ -1,24 +1,7 @@
 import { useState } from "react";
-import { EventBus, EventData, EventType } from "./eventBus";
-
-export class WhiteBoardEventData extends EventData {
-    private _id: string;
-    private _value: any;
-
-    public constructor(id: string, value: any) {
-        super();
-        this._id = id;
-        this._value = value;
-    }
-
-    public getId(): string {
-        return this._id;
-    }
-    public getValue(): any {
-        return this._value;
-    }
-
-}
+import { EventBus } from "./eventBus";
+import { EventType } from "../types/eventBus.types";
+import { WhiteBoardEventData } from "../types/whiteboard.types";
 
 interface WhiteBoardEntry {
     object: any

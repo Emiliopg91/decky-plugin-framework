@@ -1,7 +1,6 @@
 export class Utils {
     private constructor() { }
 
-
     public static generateId(existingIds: Array<string> = []): string {
         let id = String(Date.now())
 

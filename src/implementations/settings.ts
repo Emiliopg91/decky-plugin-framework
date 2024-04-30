@@ -1,25 +1,14 @@
 import { Backend } from "./backend"
-import { EventBus, EventData, EventType } from "./eventBus";
+import { EventBus } from "./eventBus";
+import { EventType } from "../types/eventBus.types";
 import { Logger } from "./logger"
-
-export class SettingsEventData extends EventData {
-    private _settings: Record<string, string>
-
-    public constructor(settings: Record<string, string>) {
-        super()
-        this._settings = settings;
-    }
-
-    public getSettings(): Record<string, string> {
-        return this._settings;
-    }
-}
+import { SettingsEventData } from "../types/settings.types"
 
 export class Settings {
     private static configuration: Record<string, string> = {}
 
     public static async initialize() {
-        Settings.configuration =  await Backend.backend_call<{}, any>("get_config", {});
+        Settings.configuration = await Backend.backend_call<{}, any>("get_config", {});
         Logger.info("Loaded configuration from file: " + JSON.stringify(Settings.configuration));
         Settings.notifyChanges();
     }

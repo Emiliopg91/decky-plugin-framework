@@ -1,34 +1,6 @@
-import { EventBus, EventData, EventType } from "./eventBus";
-
-export class LoginEventData extends EventData {
-    private _username: string;
-
-    public constructor(username: string) {
-        super()
-        this._username = username
-    }
-
-    public getUsername(): string {
-        return this._username;
-    }
-}
-
-export class SuspendEventData extends EventData {
-    private _suspend: boolean;
-
-    public constructor(isSuspend: boolean) {
-        super()
-        this._suspend = isSuspend
-    }
-
-    public isSuspend(): boolean {
-        return this._suspend;
-    }
-
-    public isResume(): boolean {
-        return !this._suspend;
-    }
-}
+import { EventBus } from "./eventBus";
+import { EventType } from "../types/eventBus.types";
+import { LoginEventData, SuspendEventData } from "../types/system.types";
 
 export class System {
     private static currentUser: string = "annonymous";

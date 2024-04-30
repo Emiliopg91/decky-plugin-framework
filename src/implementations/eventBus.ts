@@ -1,30 +1,5 @@
 import { Utils } from "./utils"
-
-export enum EventType {
-    GAME_LIFE,
-    INPUT,
-    SHORTCUT,
-    SETTINGS,
-    WHITEBOARD,
-    SUSPEND,
-    LOGIN
-}
-
-export abstract class EventData {
-    private _emmitedOn: number = Date.now()
-
-    public constructor() {
-    }
-
-    public getEmmitedOn(): number {
-        return this._emmitedOn;
-    }
-}
-
-export interface EventSubscriptionInfo {
-    id: string
-    unsubscribe: () => void
-}
+import { EventType, EventData, EventSubscriptionInfo } from "../types/eventBus.types"
 
 export class EventBus {
     private static subscribers: Record<EventType, Record<string, ((e: EventData) => void)>> = {

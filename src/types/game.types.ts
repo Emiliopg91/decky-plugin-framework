@@ -1,6 +1,7 @@
-import { LifetimeNotification, Router } from "decky-frontend-lib";
-import { EventBus, EventData, EventType } from "./eventBus"
+import { EventData } from "./eventBus.types"
+import { Game } from "../implementations/game"
 
+declare const appStore: any;
 
 export class GameEntry {
     private _gameId: number;
@@ -56,37 +57,5 @@ export class GameLifeEventData extends EventData {
 
     public getDetails() {
         return Game.getGameDetails(this._gameId);
-    }
-}
-
-declare const appStore: any;
-
-export class Game {
-    private constructor() { }
-
-    public static initialize() {
-        SteamClient.GameSessions.RegisterForAppLifetimeNotifications((e: LifetimeNotification) => {
-            const data: GameLifeEventData = new GameLifeEventData(e.unAppID, e.bRunning, e.nInstanceID)
-            EventBus.publishEvent(EventType.GAME_LIFE, data);
-        });
-    }
-
-    public static stop() {
-        EventBus.unsubscribeAll(EventType.GAME_LIFE)
-    }
-
-    public static getGameDetails(gameId: number): GameEntry {
-        return new GameEntry(gameId)
-    }
-
-    public static getRunningGames(): Array<GameEntry> {
-        let result: Array<GameEntry> = []
-
-        Router.RunningApps.forEach((g) => {
-            const entry: GameEntry = new GameEntry(Number(g.appid))
-            result.push(entry);
-        })
-
-        return result;
     }
 }
