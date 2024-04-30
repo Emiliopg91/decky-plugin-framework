@@ -1,4 +1,4 @@
-import { EventData } from "./eventBus.types";
+import { EventData } from "./eventBus";
 
 export class WhiteBoardEventData extends EventData {
     private _id: string;

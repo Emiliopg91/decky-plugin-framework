@@ -1,4 +1,4 @@
-import { EventData } from "./eventBus.types";
+import { EventData } from "./eventBus";
 
 export class LoginEventData extends EventData {
     private _username: string;
@@ -13,6 +13,9 @@ export class LoginEventData extends EventData {
     }
 }
 
+/**
+ * Class for Suspend event
+ */
 export class SuspendEventData extends EventData {
     private _suspend: boolean;
 
@@ -21,10 +24,18 @@ export class SuspendEventData extends EventData {
         this._suspend = isSuspend
     }
 
+    /**
+     * If SteamDeck is suspending
+     * @returns If is suspending
+     */
     public isSuspend(): boolean {
         return this._suspend;
     }
 
+    /**
+     * If SteamDeck is resuming
+     * @returns If is resuming
+     */
     public isResume(): boolean {
         return !this._suspend;
     }

@@ -1,11 +1,23 @@
 import { Backend } from "./backend";
-import { LogLevel } from "../types/logger.types"
+
+/**
+ * Enum for log levels
+ */
+enum LogLevel {
+    DEBUG = 0,
+    INFO = 1,
+    WARN = 2,
+    ERROR = 3
+}
 
 /**
  * Represents a logging utility.
  */
 export class Logger {
 
+    /**
+     * Private constructor to prevent instantiation
+     */
     private constructor() {
     }
 
@@ -14,8 +26,14 @@ export class Logger {
      */
     private static prefixStyle = "background-color: blue; color: white; font-weight: bold";
 
+    /**
+     * The style for method block.
+     */
     private static methodStyle = "background-color: LightCyan; color: black; font-weight: bold";
 
+    /**
+     * The style for class block.
+     */
     private static classStyle = "background-color: LightBlue; color: black; font-weight: bold";
 
     /**
@@ -38,6 +56,9 @@ export class Logger {
      */
     private static currentLevel = LogLevel.INFO;
 
+    /**
+     * Inner class to load log level
+     */
     private static async loadLogLevel() {
         Logger.currentLevel = LogLevel[(await import("./settings")).Settings.getEntry("log_level", LogLevel[Logger.currentLevel]) as keyof typeof LogLevel];
     }

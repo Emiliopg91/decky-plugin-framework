@@ -1,5 +1,8 @@
-import { EventData } from "./eventBus.types"
+import { EventData } from "./eventBus"
 
+/**
+ * Class for settings events
+ */
 export class SettingsEventData extends EventData {
     private _settings: Record<string, string>
 
@@ -8,6 +11,10 @@ export class SettingsEventData extends EventData {
         this._settings = settings;
     }
 
+    /**
+     * Get new settings
+     * @returns New settings
+     */
     public getSettings(): Record<string, string> {
         return this._settings;
     }

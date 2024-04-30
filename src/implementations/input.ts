@@ -1,17 +1,38 @@
 import { Router } from "decky-frontend-lib";
 import { Logger } from "./logger";
 import { EventBus } from "./eventBus";
-import { Button, InputEventData, ShortcutEventData } from "../types/input.types"
-import { EventData, EventType } from "../types/eventBus.types";
+import { Button, InputEventData, ShortcutEventData } from "../types/input"
+import { EventData, EventType } from "../types/eventBus";
 
+/**
+ * Inner interface for shortcut definitions
+ */
+interface ShortcutDefinition {
+    buttons: Array<Button>
+    pressed: boolean
+    time: number
+    qamAndSteamDisabled: boolean
+}
+
+/**
+ * Class for emit input events
+ */
 export class InputListener {
-
-    private static inputRegister: any = null;
+    /**
+     * Unsubscriber for controller state changes
+     */
+    private static unsubscriber: () => void;
+    /**
+     * List of previous pressed buttons
+     */
     private static previousState: Array<Button> = []
 
+    /**
+     * Initialize class and subscribers
+     */
     public static initialize() {
-        if (!InputListener.inputRegister) {
-            InputListener.inputRegister = SteamClient.Input.RegisterForControllerStateChanges((changes: any[]) => {
+        if (!InputListener.unsubscriber) {
+            InputListener.unsubscriber = SteamClient.Input.RegisterForControllerStateChanges((changes: any[]) => {
                 const currentState: Array<Button> = [];
                 for (const change of changes) {
                     const lower_buttons = change.ulButtons.toString(2).padStart(32, "0").split('');
@@ -37,39 +58,56 @@ export class InputListener {
                     EventBus.publishEvent(EventType.INPUT, data)
                     Logger.debug("Pressed inputs: " + data.toString());
                 }
-            });
+            }).unregister;
         }
     }
 
+    /**
+     * Stop subscriptions
+     */
     public static stop() {
-        InputListener.inputRegister?.unregister();
+        InputListener.unsubscriber();
         EventBus.unsubscribeAll(EventType.INPUT);
     }
 }
 
-interface ShortcutDefinition {
-    buttons: Array<Button>
-    pressed: boolean
-    time: number
-    qamAndSteamDisabled: boolean
-}
-
+/**
+ * Class for emit shortcut events
+ */
 export class ShortcutListener {
+    /**
+     * Shortcut definitions
+     */
     private static definitions: Record<string, ShortcutDefinition> = {}
 
+    /**
+     * Initialize class and subscribe
+     */
     public static initialize() {
         EventBus.subscribe(EventType.INPUT, ShortcutListener.onKeyEvent);
     }
 
+    /**
+     * Stop subscriptions
+     */
     public static stop() {
         ShortcutListener.definitions = {};
         EventBus.unsubscribeAll(EventType.SHORTCUT)
     }
 
+    /**
+     * Register new shortcut to watch for
+     * @param id - Alias for shortcut
+     * @param buttons - List of buttons
+     */
     public static watch(id: string, buttons: Array<Button>) {
         ShortcutListener.definitions[id] = { buttons, pressed: false, time: Date.now(), qamAndSteamDisabled: false };
     }
 
+    /**
+     * Inner method to process pressed button events
+     * @param data - Event data
+     */
     private static onKeyEvent(data: EventData) {
         const buttons = (data as InputEventData).getButtons();
         Object.keys(ShortcutListener.definitions).forEach((id) => {

@@ -5,12 +5,27 @@ import { ServerAPI } from "decky-frontend-lib";
  */
 export class Toast {
 
+  /**
+   * App name
+   */
   private static appName: string;
+
+  /**
+   * ServerAPI
+   */
   private static serverApi: ServerAPI;
 
+  /**
+   * Private constructor to prevent instantiation
+   */
   private constructor() {
   }
 
+  /**
+   * Initialize class
+   * @param appName - Plugin name
+   * @param serverApi - ServerAPI of plugin
+   */
   public static initialize(appName: string, serverApi: ServerAPI) {
     Toast.appName = appName;
     Toast.serverApi = serverApi;

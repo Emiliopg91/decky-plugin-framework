@@ -1,6 +1,8 @@
-import { EventData } from "./eventBus.types";
+import { EventData } from "./eventBus";
 
-
+/**
+ * Enum of all available buttons
+ */
 export const enum Button {
     SELECT = 12,
     STEAM = 13,
@@ -32,6 +34,9 @@ export const enum Button {
     RIGHT_JOYSTICK_TOUCH = 47,
 }
 
+/**
+ * Literals for every button
+ */
 const buttonAliases: Record<Button, string> = {
     [Button.SELECT]: "SELECT",
     [Button.STEAM]: "STEAM",
@@ -63,6 +68,9 @@ const buttonAliases: Record<Button, string> = {
     [Button.RIGHT_JOYSTICK_TOUCH]: "RIGHT_JOYSTICK_TOUCH"
 }
 
+/**
+ * Class for input events
+ */
 export class InputEventData extends EventData {
     private _buttons: Array<Button>;
 
@@ -71,10 +79,18 @@ export class InputEventData extends EventData {
         this._buttons = buttons
     }
 
+    /**
+     * Get list of pressed buttons
+     * @returns Pressed buttons
+     */
     public getButtons(): Array<Button> {
         return this._buttons;
     }
 
+    /**
+     * Get string representation of pressed buttons
+     * @returns Pressed buttons string
+     */
     public toString(): string {
         let line = "[";
         this._buttons.forEach(button => line = line + buttonAliases[button] + ", ")
@@ -86,6 +102,9 @@ export class InputEventData extends EventData {
     }
 }
 
+/**
+ * Class for shortcut events
+ */
 export class ShortcutEventData extends InputEventData {
     private _id: string;
     private _pressed: boolean;
@@ -96,14 +115,35 @@ export class ShortcutEventData extends InputEventData {
         this._pressed = pressed;
     }
 
+    /**
+     * Get id of shortcut
+     * @returns Id of shortcut
+     */
     public getId(): string {
         return this._id;
     }
 
-    public isPressed(): boolean {
+    /**
+     * Get if shortcut has been triggered or not
+     * @returns If shortcut has been triggered
+     */
+    public isTriggered(): boolean {
         return this._pressed;
     }
 
+    /**
+     * Get if shortcut has been released or not
+     * @returns If shortcut has been released
+     */
+    public isReleased(): boolean {
+        return !this._pressed;
+    }
+
+    /**
+     * Check if shortcut correspond to specified buttons
+     * @param buttons - List of buttons to check
+     * @returns If matches with buttons
+     */
     public isFor(buttons: Array<Button>): boolean {
         return this.getButtons().length === buttons.length && this.getButtons().every((value) => buttons.includes(value))
     }
