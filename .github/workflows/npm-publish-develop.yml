@@ -16,9 +16,14 @@ jobs:
         with:
           node-version: 21
           registry-url: https://registry.npmjs.org/
+      - run: git config --global user.email "ojosdeserbio@gmail.com"
+      - run: git config --global user.name "Emiliopg91"
       - run: npm version prerelease
       - run: npm run build
       - run: npm publish
         env: 
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      - run: git push
+      - run: git checkout develop
+      - run: git merge main -m "[skip ci] Copy to develop" --no-ff
       - run: git push
