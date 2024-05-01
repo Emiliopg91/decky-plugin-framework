@@ -21,7 +21,7 @@ export class Game {
      * Initialize class
      */
     public static initialize() {
-        this.unsubscriber = SteamClient.GameSessions.RegisterForAppLifetimeNotifications((e: LifetimeNotification) => {
+        Game.unsubscriber = SteamClient.GameSessions.RegisterForAppLifetimeNotifications((e: LifetimeNotification) => {
             const data: GameLifeEventData = new GameLifeEventData(e.unAppID, e.bRunning, e.nInstanceID)
             EventBus.publishEvent(EventType.GAME_LIFE, data);
         }).unregister;

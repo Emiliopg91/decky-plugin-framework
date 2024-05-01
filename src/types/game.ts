@@ -1,5 +1,4 @@
 import { EventData } from "./eventBus"
-import { Game } from "../implementations/game"
 
 declare const appStore: any;
 
@@ -97,7 +96,7 @@ export class GameLifeEventData extends EventData {
      * Get details of current game
      * @returns Game details
      */
-    public getDetails() {
-        return Game.getGameDetails(this._gameId);
+    public async getDetails() {
+        return (await require("../implementations/game")).Game.getGameDetails(this._gameId);
     }
 }
