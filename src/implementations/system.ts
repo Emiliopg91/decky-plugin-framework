@@ -32,7 +32,7 @@ export class System {
     private static unregisterNetworkState: () => void;
 
     /**
-     * Interval function for network changes 
+     * Interval function for network changes.
      */
     private static networkInterval: any;
 
