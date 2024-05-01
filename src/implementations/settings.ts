@@ -1,33 +1,40 @@
 import { Backend } from "./backend"
-import { EventBus, EventData, EventType } from "./eventBus";
+import { EventBus } from "./eventBus";
+import { EventType } from "../types/eventBus";
 import { Logger } from "./logger"
+import { SettingsEventData } from "../types/settings"
 
-export class SettingsEventData extends EventData {
-    private _settings: Record<string, string>
-
-    public constructor(settings: Record<string, string>) {
-        super()
-        this._settings = settings;
-    }
-
-    public getSettings(): Record<string, string> {
-        return this._settings;
-    }
-}
-
+/**
+ * Class for deal with plugin configuration
+ */
 export class Settings {
+    /**
+     * Map of configuration
+     */
     private static configuration: Record<string, string> = {}
 
+    /**
+     * Load configuration from file
+     */
     public static async initialize() {
-        Settings.configuration =  await Backend.backend_call<{}, any>("get_config", {});
+        Settings.configuration = await Backend.backend_call<{}, any>("get_config", {});
         Logger.info("Loaded configuration from file: " + JSON.stringify(Settings.configuration));
         Settings.notifyChanges();
     }
 
+    /**
+     * Stop subscriptions
+     */
     public static stop() {
         EventBus.unsubscribeAll(EventType.SHORTCUT)
     }
 
+    /**
+     * Get configuration entry
+     * @param key - Name of the property
+     * @param defaultValue - Default value
+     * @returns Entry or default value
+     */
     public static getEntry<T>(key: keyof T, defaultValue: string | null = null): string | null {
         let result = Settings.configuration[String(key)];
         if (result != null && result != undefined)
@@ -35,6 +42,12 @@ export class Settings {
         return defaultValue;
     }
 
+    /**
+     * Set configuration entry
+     * @param key - Name of the property
+     * @param value - Value to set
+     * @param persist - If the value will be persisted to file
+     */
     public static async setEntry<T>(key: keyof T, value: string, persist: boolean = false) {
         Logger.info("Setting configuration '" + String(key) + "'='" + value + "'")
         Settings.configuration[String(key)] = value;
@@ -45,6 +58,9 @@ export class Settings {
         Settings.notifyChanges();
     }
 
+    /**
+     * Inner method to notify configuration changes
+     */
     private static async notifyChanges() {
         const data: SettingsEventData = new SettingsEventData({ ...Settings.configuration })
         EventBus.publishEvent(EventType.SETTINGS, data)

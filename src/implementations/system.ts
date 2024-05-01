@@ -1,43 +1,36 @@
-import { EventBus, EventData, EventType } from "./eventBus";
+import { EventBus } from "./eventBus";
+import { EventType } from "../types/eventBus";
+import { LoginEventData, SuspendEventData } from "../types/system";
 
-export class LoginEventData extends EventData {
-    private _username: string;
-
-    public constructor(username: string) {
-        super()
-        this._username = username
-    }
-
-    public getUsername(): string {
-        return this._username;
-    }
-}
-
-export class SuspendEventData extends EventData {
-    private _suspend: boolean;
-
-    public constructor(isSuspend: boolean) {
-        super()
-        this._suspend = isSuspend
-    }
-
-    public isSuspend(): boolean {
-        return this._suspend;
-    }
-
-    public isResume(): boolean {
-        return !this._suspend;
-    }
-}
-
+/**
+ * Class for access system information
+ */
 export class System {
+    /**
+     * Current user name
+     */
     private static currentUser: string = "annonymous";
 
+    /**
+     * Unsubscriber function for Login changes
+     */
     private static unregisterLogin: () => void;
+    
+    /**
+     * Unsubscriber function for Suspend changes
+     */
     private static unregisterSuspend: () => void;
+    
+    /**
+     * Unsubscriber function for Resume changes
+     */
     private static unregisterResume: () => void;
 
-    public static initialize(): Promise<void> {
+    /**
+     * Initialize class and subscriptions
+     * @returns Promise for readiness
+     */
+    public static async initialize(){
         const promiseLogin = new Promise<void>((resolve) => {
             System.unregisterLogin = SteamClient.User.RegisterForLoginStateChange((username: string) => {
                 System.currentUser = username;
@@ -57,6 +50,9 @@ export class System {
         return promiseLogin;
     }
 
+    /**
+     * Stop subscriptions
+     */
     public static stop() {
         System.unregisterLogin()
         System.unregisterSuspend()
@@ -65,14 +61,26 @@ export class System {
         EventBus.unsubscribeAll(EventType.LOGIN)
     }
 
+    /**
+     * Get current language
+     * @returns UI language
+     */
     public static getLanguage(): string {
         return window.LocalizationManager.m_rgLocalesToUse[0];
     }
 
+    /**
+     * Get country for system based on IP
+     * @returns Promise for IP Country
+     */
     public static getIpCountry(): Promise<string> {
         return SteamClient.Settings.GetIPCountry()
     }
 
+    /**
+     * Get current username
+     * @returns Username
+     */
     public static getCurrentUser(): string {
         return this.currentUser;
     }
