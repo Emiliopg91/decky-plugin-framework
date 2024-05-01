@@ -63,6 +63,7 @@ export class System {
             if (!e.bChecking) {
                 const connected = e.eConnectivityTestResult === 0 || e.eConnectivityTestResult === 1
                 if (System.connectedInet != connected) {
+                    System.connectedInet = connected
                     EventBus.publishEvent(EventType.NETWORK, new NetworkEventData(connected));
                 }
             }
