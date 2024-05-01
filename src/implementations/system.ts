@@ -57,7 +57,7 @@ export class System {
             EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(false));
         }).unregister
 
-        System.unregisterNetworkState = SteamClient.System.Network.RegisterForConnectionStateUpdate((e: any) => {
+        System.unregisterNetworkState = SteamClient.System.Network.RegisterForConnectivityTestChanges((e: any) => {
             const connected = e.eConnectivityTestResult === 0 || e.eConnectivityTestResult === 1
             EventBus.publishEvent(EventType.SUSPEND, new NetworkEventData(connected));
         }).unregister
