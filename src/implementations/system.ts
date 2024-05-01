@@ -1,6 +1,8 @@
 import { EventBus } from "./eventBus";
 import { EventType } from "../types/eventBus";
-import { LoginEventData, NetworkEventData, SuspendEventData, SystemNetworkStore } from "../types/system";
+import { LoginEventData, NetworkEventData, SuspendEventData } from "../types/system";
+
+declare const SystemNetworkStore: any;
 
 /**
  * Class for access system information

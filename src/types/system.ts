@@ -1,7 +1,5 @@
 import { EventData } from "./eventBus";
 
-export declare const SystemNetworkStore: any;
-
 export class LoginEventData extends EventData {
     private _username: string;
 
