@@ -3,7 +3,7 @@ name: Develop Node.js Package
 on:
   push:
     branches:
-      - main
+      - develop
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
