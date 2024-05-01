@@ -1,5 +1,7 @@
 import { EventData } from "./eventBus";
 
+export declare const SystemNetworkStore: any;
+
 export class LoginEventData extends EventData {
     private _username: string;
 
@@ -38,5 +40,25 @@ export class SuspendEventData extends EventData {
      */
     public isResume(): boolean {
         return !this._suspend;
+    }
+}
+
+/**
+ * Class for network event
+ */
+export class NetworkEventData extends EventData {
+    private _connectedToInet: boolean;
+
+    public constructor(isConnectedToInet: boolean) {
+        super()
+        this._connectedToInet = isConnectedToInet
+    }
+
+    /**
+     * If SteamDeck is connected to inet
+     * @returns If is connected to inet
+     */
+    public isConnectedToInet(): boolean {
+        return this._connectedToInet;
     }
 }

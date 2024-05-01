@@ -1,6 +1,6 @@
 import { EventBus } from "./eventBus";
 import { EventType } from "../types/eventBus";
-import { LoginEventData, SuspendEventData } from "../types/system";
+import { LoginEventData, NetworkEventData, SuspendEventData, SystemNetworkStore } from "../types/system";
 
 /**
  * Class for access system information
@@ -15,22 +15,32 @@ export class System {
      * Unsubscriber function for Login changes
      */
     private static unregisterLogin: () => void;
-    
+
     /**
      * Unsubscriber function for Suspend changes
      */
     private static unregisterSuspend: () => void;
-    
+
     /**
      * Unsubscriber function for Resume changes
      */
     private static unregisterResume: () => void;
 
     /**
+     * Unsubscriber function for network changes
+     */
+    private static unregisterNetworkState: () => void;
+
+    /**
+     * Interval function for network changes
+     */
+    private static networkInterval: any;
+
+    /**
      * Initialize class and subscriptions
      * @returns Promise for readiness
      */
-    public static async initialize(){
+    public static async initialize() {
         const promiseLogin = new Promise<void>((resolve) => {
             System.unregisterLogin = SteamClient.User.RegisterForLoginStateChange((username: string) => {
                 System.currentUser = username;
@@ -47,6 +57,13 @@ export class System {
             EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(false));
         }).unregister
 
+        System.unregisterNetworkState = SteamClient.System.Network.RegisterForConnectionStateUpdate((e: any) => {
+            const connected = e.eConnectivityTestResult === 0 || e.eConnectivityTestResult === 1
+            EventBus.publishEvent(EventType.SUSPEND, new NetworkEventData(connected));
+        }).unregister
+
+        System.networkInterval = setInterval(SystemNetworkStore.RecheckConnectivity, 10000)
+
         return promiseLogin;
     }
 
@@ -54,9 +71,11 @@ export class System {
      * Stop subscriptions
      */
     public static stop() {
+        clearInterval(System.networkInterval)
         System.unregisterLogin()
         System.unregisterSuspend()
         System.unregisterResume()
+        System.unregisterNetworkState()
         EventBus.unsubscribeAll(EventType.SUSPEND)
         EventBus.unsubscribeAll(EventType.LOGIN)
     }

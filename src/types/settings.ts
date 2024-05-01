@@ -18,4 +18,5 @@ export class SettingsEventData extends EventData {
     public getSettings(): Record<string, string> {
         return this._settings;
     }
+    
 }

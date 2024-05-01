@@ -23,6 +23,7 @@ export class EventBus {
         [EventType.SETTINGS]: {},
         [EventType.WHITEBOARD]: {},
         [EventType.SUSPEND]: {},
+        [EventType.NETWORK]: {},
         [EventType.LOGIN]: {}
     }
 
