@@ -16,7 +16,7 @@ jobs:
       - run: git config --global user.email "ojosdeserbio@gmail.com"
       - run: git config --global user.name "Emiliopg91"
       - run: npm install
-      - run: npm version prerelease
+      - run: npm version patch
       - run: npm run build
       - run: npm publish
         env: 
@@ -25,5 +25,5 @@ jobs:
       - run: git remote update
       - run: git fetch
       - run: git checkout --track origin/develop
-      - run: git reset --hard master --
+      - run: git reset --hard main --
       - run: git push --force
