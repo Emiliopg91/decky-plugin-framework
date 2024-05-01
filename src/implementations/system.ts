@@ -62,7 +62,7 @@ export class System {
             EventBus.publishEvent(EventType.SUSPEND, new NetworkEventData(connected));
         }).unregister
 
-        System.networkInterval = setInterval(SteamClient.System.Network.ForceTestConnectivity, 10000)
+        System.networkInterval = setInterval(() => { SteamClient.System.Network.ForceTestConnectivity() }, 10000)
 
         return promiseLogin;
     }
