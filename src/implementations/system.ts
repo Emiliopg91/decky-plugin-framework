@@ -2,8 +2,6 @@ import { EventBus } from "./eventBus";
 import { EventType } from "../types/eventBus";
 import { LoginEventData, NetworkEventData, SuspendEventData } from "../types/system";
 
-declare const SystemNetworkStore: any;
-
 /**
  * Class for access system information
  */
@@ -64,7 +62,7 @@ export class System {
             EventBus.publishEvent(EventType.SUSPEND, new NetworkEventData(connected));
         }).unregister
 
-        System.networkInterval = setInterval(SystemNetworkStore.RecheckConnectivity, 10000)
+        System.networkInterval = setInterval(SteamClient.System.Network.ForceTestConnectivity, 10000)
 
         return promiseLogin;
     }
