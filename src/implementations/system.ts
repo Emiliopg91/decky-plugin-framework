@@ -59,7 +59,7 @@ export class System {
 
         System.unregisterNetworkState = SteamClient.System.Network.RegisterForConnectivityTestChanges((e: any) => {
             const connected = e.eConnectivityTestResult === 0 || e.eConnectivityTestResult === 1
-            EventBus.publishEvent(EventType.SUSPEND, new NetworkEventData(connected));
+            EventBus.publishEvent(EventType.NETWORK, new NetworkEventData(connected));
         }).unregister
 
         System.networkInterval = setInterval(() => { SteamClient.System.Network.ForceTestConnectivity() }, 10000)
