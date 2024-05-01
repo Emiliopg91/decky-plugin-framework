@@ -36,6 +36,8 @@ export class System {
      */
     private static networkInterval: any;
 
+    private static connectedInet: boolean = false;
+
     /**
      * Initialize class and subscriptions
      * @returns Promise for readiness
@@ -58,10 +60,14 @@ export class System {
         }).unregister
 
         System.unregisterNetworkState = SteamClient.System.Network.RegisterForConnectivityTestChanges((e: any) => {
-            const connected = e.eConnectivityTestResult === 0 || e.eConnectivityTestResult === 1
-            EventBus.publishEvent(EventType.NETWORK, new NetworkEventData(connected));
+            if (!e.bChecking) {
+                const connected = e.eConnectivityTestResult === 0 || e.eConnectivityTestResult === 1
+                if (System.connectedInet != connected) {
+                    EventBus.publishEvent(EventType.NETWORK, new NetworkEventData(connected));
+                }
+            }
         }).unregister
-
+        SteamClient.System.Network.ForceTestConnectivity()
         System.networkInterval = setInterval(() => { SteamClient.System.Network.ForceTestConnectivity() }, 10000)
 
         return promiseLogin;
@@ -101,6 +107,14 @@ export class System {
      * @returns Username
      */
     public static getCurrentUser(): string {
-        return this.currentUser;
+        return System.currentUser;
+    }
+
+    /**
+     * Get current username
+     * @returns Username
+     */
+    public static isConnectedToInet(): boolean {
+        return System.connectedInet;
     }
 }
