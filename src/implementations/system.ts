@@ -2,10 +2,14 @@ import { EventBus } from "./eventBus";
 import { EventType } from "../types/eventBus";
 import { LoginEventData, NetworkEventData, SuspendEventData } from "../types/system";
 import { Utils } from "./utils";
-import { SystemNetworkStore } from "../types/globals"
+import { SystemNetworkStore } from "../globals/systemNetworkStore"
 import { NetworkInfo } from "../types/settings";
+import { SteamClient } from "../globals/steamClient"
+import { SystemStoragStore } from "../globals/systemStoragStore"
 
+declare var SteamClient: SteamClient
 declare var SystemNetworkStore: SystemNetworkStore
+declare var SystemStoragStore: SystemStoragStore
 
 /**
  * Class for access system information
@@ -105,7 +109,7 @@ export class System {
      * @returns Promise for IP Country
      */
     public static getIpCountry(): Promise<string> {
-        return SteamClient.Settings.GetIPCountry()
+        return SteamClient.User.GetIPCountry()
     }
 
     /**
@@ -125,13 +129,13 @@ export class System {
     }
 
     public static async getSteamDeckName(): Promise<string> {
-        return SteamClient["Auth"].GetLocalHostname()
+        return SteamClient.Auth.GetLocalHostname();
     }
 
     public static getNetworkInfo(): Array<NetworkInfo> {
-        const result: Array<NetworkInfo> = []
-        const knownMacs: Array<string> = []
-        const knownIps: Array<string> = []
+        const result: Array<NetworkInfo> = [];
+        const knownMacs: Array<string> = [];
+        const knownIps: Array<string> = [];
 
         if (SystemNetworkStore.accessPoints !== undefined) {
             SystemNetworkStore.accessPoints.forEach((ap) => {
@@ -172,5 +176,21 @@ export class System {
         }
 
         return result;
+    }
+
+    public static getScreenBrightness(): number {
+        return SystemStoragStore.m_flDisplayBrightness.m_currentValue
+    }
+
+    public static setScreenBrightness(level: number) {
+        SteamClient.System.Display.SetBrightness(level)
+    }
+
+    public static isAirplaneModeEnabled(): boolean {
+        return SystemStoragStore.m_bAirplaneMode.m_currentValue;
+    }
+
+    public static setAirplaneModeEnabled(enabled: boolean) {
+        SteamClient.System.SetAirplaneMode(enabled)
     }
 }

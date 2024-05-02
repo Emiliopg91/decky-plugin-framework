@@ -3,6 +3,9 @@ import { Logger } from "./logger";
 import { EventBus } from "./eventBus";
 import { Button, InputEventData, ShortcutEventData } from "../types/input"
 import { EventData, EventType } from "../types/eventBus";
+import { SteamClient } from "../globals/steamClient"
+
+declare var SteamClient: SteamClient
 
 /**
  * Inner interface for shortcut definitions
