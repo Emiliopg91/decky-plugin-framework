@@ -40,3 +40,23 @@ export class SuspendEventData extends EventData {
         return !this._suspend;
     }
 }
+
+/**
+ * Class for network event
+ */
+export class NetworkEventData extends EventData {
+    private _connectedToInet: boolean;
+
+    public constructor(isConnectedToInet: boolean) {
+        super()
+        this._connectedToInet = isConnectedToInet
+    }
+
+    /**
+     * If SteamDeck is connected to inet
+     * @returns If is connected to inet
+     */
+    public isConnectedToInet(): boolean {
+        return this._connectedToInet;
+    }
+}

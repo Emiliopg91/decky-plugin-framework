@@ -3,7 +3,7 @@ name: Develop Node.js Package
 on:
   push:
     branches:
-      - main
+      - develop
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
       - run: git config --global user.email "ojosdeserbio@gmail.com"
       - run: git config --global user.name "Emiliopg91"
       - run: npm install
-      - run: npm version prepatch
+      - run: npm version prerelease
       - run: npm run build
       - run: npm publish
         env: 

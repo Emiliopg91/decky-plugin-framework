@@ -9,6 +9,7 @@ export enum EventType {
     SETTINGS,
     WHITEBOARD,
     SUSPEND,
+    NETWORK,
     LOGIN
 }
 

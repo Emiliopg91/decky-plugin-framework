@@ -2,6 +2,9 @@ import { LifetimeNotification, Router } from "decky-frontend-lib";
 import { EventBus } from "./eventBus"
 import { EventType } from "../types/eventBus";
 import { GameLifeEventData, GameEntry } from "../types/game";
+import { SteamClient } from "../globals/steamClient"
+
+declare var SteamClient: SteamClient
 
 /**
  * Class for access game information
@@ -21,7 +24,7 @@ export class Game {
      * Initialize class
      */
     public static initialize() {
-        this.unsubscriber = SteamClient.GameSessions.RegisterForAppLifetimeNotifications((e: LifetimeNotification) => {
+        Game.unsubscriber = SteamClient.GameSessions.RegisterForAppLifetimeNotifications((e: LifetimeNotification) => {
             const data: GameLifeEventData = new GameLifeEventData(e.unAppID, e.bRunning, e.nInstanceID)
             EventBus.publishEvent(EventType.GAME_LIFE, data);
         }).unregister;

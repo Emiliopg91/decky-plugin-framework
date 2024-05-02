@@ -1,7 +1,8 @@
+import { Game } from "../implementations/game";
 import { EventData } from "./eventBus"
-import { Game } from "../implementations/game"
+import { AppStore } from "../globals/appStore"
 
-declare const appStore: any;
+declare const appStore: AppStore;
 
 /**
  * Game detail entry class
@@ -25,7 +26,7 @@ export class GameEntry {
      * Get display name of game
      * @returns Display name
      */
-    public getDisplayName(): boolean {
+    public getDisplayName(): string {
         return appStore.GetAppOverviewByGameID(this._gameId)?.display_name
     }
 
@@ -97,7 +98,7 @@ export class GameLifeEventData extends EventData {
      * Get details of current game
      * @returns Game details
      */
-    public getDetails() {
+    public async getDetails() {
         return Game.getGameDetails(this._gameId);
     }
 }
