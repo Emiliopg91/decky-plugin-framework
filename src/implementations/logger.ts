@@ -92,8 +92,18 @@ export class Logger {
             methd = methd.padEnd(10, " ").substring(0, 10)
             const levelStr = LogLevel[lvl].padEnd(5, " ")
 
-            Backend.backend_call<{ level: string, msg: string }, void>("log", { level: levelStr, msg: "[" + clazz + "][" + methd + "]: " + args })
             console.log("%c %s %c %s %c %s %c %s ", Logger.prefixStyle, Logger.prefix, Logger.levelStyles[lvl], levelStr, Logger.classStyle, clazz, Logger.methodStyle, methd, ...args);
+
+            let strArgs = ""
+            args.forEach((arg: any) => {
+                if (typeof arg === "object") {
+                    strArgs = strArgs + JSON.stringify(arg) + " "
+                } else {
+                    strArgs = strArgs + arg + " "
+                }
+            });
+
+            Backend.backend_call<{ level: string, msg: string }, void>("log", { level: levelStr, msg: "[" + clazz + "][" + methd + "]: " + strArgs })
         }
     }
 
