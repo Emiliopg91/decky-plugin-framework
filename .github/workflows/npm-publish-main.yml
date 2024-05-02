@@ -27,6 +27,6 @@ jobs:
       - run: git checkout --track origin/develop
       - run: git reset --hard main --
       - run: git push --force
-      - run: packageName=$(npm run env | grep "npm_package_name" | awk -F "=" '{print $2}'
+      - run: packageName=$(npm run env | grep "npm_package_name" | awk -F "=" '{print $2}')
       - run: versionsToDrop=$(npm view decky-plugin-framework versions --json | grep '[[:digit:]].[[:digit:]].[[:digit:]]-[[:digit:]]' | sed 's/\"//g' | sed 's/,//g' | sed 's/[[:space:]]//g')
       - run: while IFS= read -r line; do npm unpublish $packageName@$line; done <<< "$versionsToDrop"        
