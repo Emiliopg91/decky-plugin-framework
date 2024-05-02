@@ -86,7 +86,7 @@ export class Logger {
             const callerStr = (clazz+"::"+methd).padEnd(25, " ").substring(0, 25)
             const levelStr = LogLevel[lvl].padEnd(5, " ")
 
-            console.log("%c %s %c %s %c %s %c %s ", Logger.prefixStyle, Logger.prefix, Logger.levelStyles[lvl], levelStr, Logger.callerStyle, callerStr, ...args);
+            console.log("%c %s %c %s %c %s ", Logger.prefixStyle, Logger.prefix, Logger.levelStyles[lvl], levelStr, Logger.callerStyle, callerStr, ...args);
 
             let strArgs = ""
             args.forEach((arg: any) => {
