@@ -21,7 +21,7 @@ jobs:
       - run: npm publish
         env: 
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-      - run: git push
+      - run: git push --follow-tags
       - run: git remote update
       - run: git fetch
       - run: git checkout --track origin/develop
