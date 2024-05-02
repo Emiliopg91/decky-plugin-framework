@@ -27,3 +27,4 @@ jobs:
       - run: git checkout --track origin/develop
       - run: git reset --hard main --
       - run: git push --force
+      - run: npm view decky-plugin-framework versions --json | grep '[[:digit:]].[[:digit:]].[[:digit:]]-[[:digit:]]' | sed 's/\"//g' | sed 's/,//g' | sed 's/[[:space:]]//g' | tr '\n' ' '
