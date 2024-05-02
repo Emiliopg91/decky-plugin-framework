@@ -147,6 +147,7 @@ export class System {
                         if (!knownIps.includes(ip)) {
                             let dnsIps: Array<string> = []
 
+                            const subnet = Utils.ipAndMaskToSubnet(addr.ip, addr.netmask)
                             const subnetMask = Utils.intToIp(addr.netmask)
                             if (ap.m_DeviceInfo.ip4.dns_ip !== undefined) {
                                 ap.m_DeviceInfo.ip4.dns_ip.forEach((dns) => {
@@ -159,14 +160,14 @@ export class System {
                                     if (wap.is_active) {
                                         knownIps.push(ip)
                                         knownMacs.push(mac)
-                                        result.push(new NetworkInfo(false, mac, ip, subnetMask, dnsIps, wap.ssid))
+                                        result.push(new NetworkInfo(false, mac, ip, subnet, subnetMask, dnsIps, wap.ssid))
                                     }
                                 })
                             } else {
                                 if (ap.m_DeviceInfo.wired.is_cable_present) {
                                     knownIps.push(ip)
                                     knownMacs.push(mac)
-                                    result.push(new NetworkInfo(true, mac, ip, subnetMask, dnsIps, ap.m_DeviceInfo.wired.friendly_name))
+                                    result.push(new NetworkInfo(true, mac, ip, subnet, subnetMask, dnsIps, ap.m_DeviceInfo.wired.friendly_name))
                                 }
                             }
                         }
