@@ -6,10 +6,12 @@ import { SystemNetworkStore } from "../globals/systemNetworkStore"
 import { NetworkInfo } from "../types/settings";
 import { SteamClient } from "../globals/steamClient"
 import { SystemStoragStore } from "../globals/systemStoragStore"
+import { LoginStore } from "../globals/loginStore"
 
 declare var SteamClient: SteamClient
 declare var SystemNetworkStore: SystemNetworkStore
 declare var SystemStoragStore: SystemStoragStore
+declare var loginStore: LoginStore
 
 /**
  * Class for access system information
@@ -52,13 +54,11 @@ export class System {
      * @returns Promise for readiness
      */
     public static async initialize() {
-        const promiseLogin = new Promise<void>((resolve) => {
-            System.unregisterLogin = SteamClient.User.RegisterForLoginStateChange((username: string) => {
-                System.currentUser = username;
-                EventBus.publishEvent(EventType.LOGIN, new LoginEventData(username));
-                resolve();
-            }).unregister
-        });
+        System.currentUser = loginStore.accountName
+        System.unregisterLogin = SteamClient.User.RegisterForLoginStateChange((username: string) => {
+            System.currentUser = username;
+            EventBus.publishEvent(EventType.LOGIN, new LoginEventData(username));
+        }).unregister
 
         System.unregisterSuspend = SteamClient.System.RegisterForOnSuspendRequest(() => {
             EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(true));
@@ -79,8 +79,6 @@ export class System {
         }).unregister
         SteamClient.System.Network.ForceTestConnectivity()
         System.networkInterval = setInterval(() => { SteamClient.System.Network.ForceTestConnectivity() }, 10000)
-
-        return promiseLogin;
     }
 
     /**
@@ -147,6 +145,7 @@ export class System {
                         if (!knownIps.includes(ip)) {
                             let dnsIps: Array<string> = []
 
+                            const subnet = Utils.ipAndMaskToSubnet(addr.ip, addr.netmask)
                             const subnetMask = Utils.intToIp(addr.netmask)
                             if (ap.m_DeviceInfo.ip4.dns_ip !== undefined) {
                                 ap.m_DeviceInfo.ip4.dns_ip.forEach((dns) => {
@@ -159,14 +158,14 @@ export class System {
                                     if (wap.is_active) {
                                         knownIps.push(ip)
                                         knownMacs.push(mac)
-                                        result.push(new NetworkInfo(false, mac, ip, subnetMask, dnsIps, wap.ssid))
+                                        result.push(new NetworkInfo(false, mac, ip, subnet, subnetMask, dnsIps, wap.ssid))
                                     }
                                 })
                             } else {
                                 if (ap.m_DeviceInfo.wired.is_cable_present) {
                                     knownIps.push(ip)
                                     knownMacs.push(mac)
-                                    result.push(new NetworkInfo(true, mac, ip, subnetMask, dnsIps, ap.m_DeviceInfo.wired.friendly_name))
+                                    result.push(new NetworkInfo(true, mac, ip, subnet, subnetMask, dnsIps, ap.m_DeviceInfo.wired.friendly_name))
                                 }
                             }
                         }

@@ -28,7 +28,11 @@ export class Utils {
         } while (true);
     }
 
-    public static intToIp (ipInt:number):string {
-        return ( (ipInt>>>24) +'.' + (ipInt>>16 & 255) +'.' + (ipInt>>8 & 255) +'.' + (ipInt & 255) );
+    public static intToIp(ipInt: number): string {
+        return ((ipInt >>> 24) + '.' + (ipInt >> 16 & 255) + '.' + (ipInt >> 8 & 255) + '.' + (ipInt & 255));
+    }
+
+    public static ipAndMaskToSubnet(ipInt: number, netmask: number):string {
+        return ((ipInt >>> 24 & netmask >>> 24) + '.' + ((ipInt >> 16 & 255) & (netmask >> 16 & 255)) + '.' + ((ipInt >> 8 & 255) & (netmask >> 8 & 255)) + '.' + ((ipInt & 255) & (netmask & 255)));
     }
 }

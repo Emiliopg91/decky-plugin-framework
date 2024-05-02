@@ -25,14 +25,16 @@ export class NetworkInfo {
     private wired: boolean
     private mac: string
     private ip: string
+    private subnet: string
     private subnetMask: string
     private dnsIps: Array<string>
     private accessPoint: string;
 
-    public constructor(wired: boolean, mac: string, ip: string, subnetMask: string, dnsIps: Array<string>, accessPoint: string) {
+    public constructor(wired: boolean, mac: string, ip: string, subnet: string, subnetMask: string, dnsIps: Array<string>, accessPoint: string) {
         this.wired = wired;
         this.mac = mac;
         this.ip = ip;
+        this.subnet = subnet;
         this.subnetMask = subnetMask;
         this.dnsIps = dnsIps;
         this.accessPoint = accessPoint;
@@ -48,6 +50,10 @@ export class NetworkInfo {
 
     public getIp(): string {
         return this.ip;
+    }
+
+    public getSubnet(): string {
+        return this.subnet;
     }
 
     public getSubnetMask(): string {

@@ -29,12 +29,7 @@ export class Logger {
     /**
      * The style for method block.
      */
-    private static methodStyle = "background-color: LightCyan; color: black; font-weight: bold";
-
-    /**
-     * The style for class block.
-     */
-    private static classStyle = "background-color: LightBlue; color: black; font-weight: bold";
+    private static callerStyle = "background-color: LightCyan; color: black; font-weight: bold";
 
     /**
      * Styles for different log levels.
@@ -88,12 +83,21 @@ export class Logger {
                 clazz = caller.split(".")[0]
                 methd = caller.split(".")[1]
             }
-            clazz = clazz.padEnd(15, " ").substring(0, 15)
-            methd = methd.padEnd(10, " ").substring(0, 10)
+            const callerStr = (clazz+"::"+methd).padEnd(25, " ").substring(0, 25)
             const levelStr = LogLevel[lvl].padEnd(5, " ")
 
-            Backend.backend_call<{ level: string, msg: string }, void>("log", { level: levelStr, msg: "[" + clazz + "][" + methd + "]: " + args })
-            console.log("%c %s %c %s %c %s %c %s ", Logger.prefixStyle, Logger.prefix, Logger.levelStyles[lvl], levelStr, Logger.classStyle, clazz, Logger.methodStyle, methd, ...args);
+            console.log("%c %s %c %s %c %s ", Logger.prefixStyle, Logger.prefix, Logger.levelStyles[lvl], levelStr, Logger.callerStyle, callerStr, ...args);
+
+            let strArgs = ""
+            args.forEach((arg: any) => {
+                if (typeof arg === "object") {
+                    strArgs = strArgs + JSON.stringify(arg) + " "
+                } else {
+                    strArgs = strArgs + arg + " "
+                }
+            });
+
+            Backend.backend_call<{ level: string, msg: string }, void>("log", { level: levelStr, msg: "[" + callerStr + "]: " + strArgs })
         }
     }
 
