@@ -18,5 +18,47 @@ export class SettingsEventData extends EventData {
     public getSettings(): Record<string, string> {
         return this._settings;
     }
-    
+
+}
+
+export class NetworkInfo {
+    private wired: boolean
+    private mac: string
+    private ip: string
+    private subnetMask: string
+    private dnsIps: Array<string>
+    private accessPoint: string;
+
+    public constructor(wired: boolean, mac: string, ip: string, subnetMask: string, dnsIps: Array<string>, accessPoint: string) {
+        this.wired = wired;
+        this.mac = mac;
+        this.ip = ip;
+        this.subnetMask = subnetMask;
+        this.dnsIps = dnsIps;
+        this.accessPoint = accessPoint;
+    }
+
+    public isWired(): boolean {
+        return this.wired;
+    }
+
+    public getMac(): string {
+        return this.mac;
+    }
+
+    public getIp(): string {
+        return this.ip;
+    }
+
+    public getSubnetMask(): string {
+        return this.subnetMask;
+    }
+
+    public getDnsIps(): Array<string> {
+        return this.dnsIps;
+    }
+
+    public getAccessPoint(): string {
+        return this.accessPoint;
+    }
 }

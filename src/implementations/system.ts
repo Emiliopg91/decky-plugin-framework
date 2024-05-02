@@ -1,6 +1,11 @@
 import { EventBus } from "./eventBus";
 import { EventType } from "../types/eventBus";
 import { LoginEventData, NetworkEventData, SuspendEventData } from "../types/system";
+import { Utils } from "./utils";
+import { SystemNetworkStore } from "../types/globals"
+import { NetworkInfo } from "../types/settings";
+
+declare var SystemNetworkStore: SystemNetworkStore
 
 /**
  * Class for access system information
@@ -117,5 +122,55 @@ export class System {
      */
     public static isConnectedToInet(): boolean {
         return System.connectedInet;
+    }
+
+    public static async getSteamDeckName(): Promise<string> {
+        return SteamClient["Auth"].GetLocalHostname()
+    }
+
+    public static getNetworkInfo(): Array<NetworkInfo> {
+        const result: Array<NetworkInfo> = []
+        const knownMacs: Array<string> = []
+        const knownIps: Array<string> = []
+
+        if (SystemNetworkStore.accessPoints !== undefined) {
+            SystemNetworkStore.accessPoints.forEach((ap) => {
+                const mac: string = ap.m_DeviceInfo.mac
+                if (ap.m_DeviceInfo.ip4.addresses !== undefined && !knownMacs.includes(ap.m_DeviceInfo.mac)) {
+                    ap.m_DeviceInfo.ip4.addresses.forEach((addr) => {
+                        const ip = Utils.intToIp(addr.ip)
+
+                        if (!knownIps.includes(ip)) {
+                            let dnsIps: Array<string> = []
+
+                            const subnetMask = Utils.intToIp(addr.netmask)
+                            if (ap.m_DeviceInfo.ip4.dns_ip !== undefined) {
+                                ap.m_DeviceInfo.ip4.dns_ip.forEach((dns) => {
+                                    dnsIps.push(Utils.intToIp(dns))
+                                })
+                            }
+
+                            if (ap.m_DeviceInfo.wired === undefined) {
+                                ap.m_DeviceInfo.wireless.aps.forEach((wap) => {
+                                    if (wap.is_active) {
+                                        knownIps.push(ip)
+                                        knownMacs.push(mac)
+                                        result.push(new NetworkInfo(false, mac, ip, subnetMask, dnsIps, wap.ssid))
+                                    }
+                                })
+                            } else {
+                                if (ap.m_DeviceInfo.wired.is_cable_present) {
+                                    knownIps.push(ip)
+                                    knownMacs.push(mac)
+                                    result.push(new NetworkInfo(true, mac, ip, subnetMask, dnsIps, ap.m_DeviceInfo.wired.friendly_name))
+                                }
+                            }
+                        }
+                    })
+                }
+            })
+        }
+
+        return result;
     }
 }
