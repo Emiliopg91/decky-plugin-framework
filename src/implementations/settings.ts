@@ -36,7 +36,7 @@ export class Settings {
      * @returns Entry or default value
      */
     public static getEntry<T>(key: keyof T, defaultValue: string | null = null): string | null {
-        let keys = key.split('.');
+        let keys = String(key).split('.');
         let result = Settings.configuration;
 
         for (let i = 0; i < keys.length; i++) {
