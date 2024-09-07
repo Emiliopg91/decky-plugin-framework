@@ -36,10 +36,18 @@ export class Settings {
      * @returns Entry or default value
      */
     public static getEntry<T>(key: keyof T, defaultValue: string | null = null): string | null {
-        let result = Settings.configuration[String(key)];
-        if (result != null && result != undefined)
-            return result;
-        return defaultValue;
+        let keys = key.split('.');
+        let result = Settings.configuration;
+
+        for (let i = 0; i < keys.length; i++) {
+            if (result != null && result != undefined && keys[i] in result) {
+                result = result[keys[i]];
+            } else {
+                return defaultValue;
+            }
+        }
+    
+        return (result != null && result != undefined) ? result : defaultValue;
     }
 
     /**
