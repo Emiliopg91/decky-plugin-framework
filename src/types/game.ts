@@ -4,6 +4,12 @@ import { AppStore } from "../globals/appStore"
 
 declare const appStore: AppStore;
 
+export interface LifetimeNotification{
+    unAppID:number,
+    bRunning:boolean,
+    nInstanceID: number
+}
+
 /**
  * Game detail entry class
  */

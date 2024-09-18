@@ -1,9 +1,9 @@
-import { Router } from "decky-frontend-lib";
 import { Logger } from "./logger";
 import { EventBus } from "./eventBus";
 import { Button, InputEventData, ShortcutEventData } from "../types/input"
 import { EventData, EventType } from "../types/eventBus";
 import { SteamClient } from "../globals/steamClient"
+import { Router } from "@decky/ui";
 
 declare var SteamClient: SteamClient
 

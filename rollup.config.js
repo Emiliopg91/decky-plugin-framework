@@ -7,8 +7,7 @@ const outputConfig = {
   file: "dist/index.js",
   globals: {
     react: "SP_REACT" ,
-    "react-dom": "SP_REACTDOM",
-    "decky-frontend-lib": "DFL"
+    "react-dom": "SP_REACTDOM"
   },
   format: 'iife',
   exports: 'auto',
@@ -22,7 +21,7 @@ export default defineConfig({
     typescript()
   ],
   context: 'window',
-  external: ["react", "react-dom", "decky-frontend-lib"],
+  external: ["react", "react-dom"],
   output: outputConfig
 });
  

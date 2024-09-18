@@ -1,4 +1,3 @@
-import { ServerAPI } from "decky-frontend-lib";
 import { Backend } from "./backend";
 import { Logger } from "./logger";
 import { Toast } from "./toast";
@@ -25,10 +24,9 @@ export class Framework {
      * @param pluginVersion - Plugin version
      * @param translations - Map of translations
      */
-    public static async initialize(serverApi: ServerAPI, pluginName: string, pluginVersion: string, translations: Record<string, Record<string, string>>) {
+    public static async initialize(pluginName: string, pluginVersion: string, translations: Record<string, Record<string, string>>) {
         await System.initialize()
-        await Backend.initialize(serverApi);
-        await Toast.initialize(pluginName, serverApi)
+        await Toast.initialize(pluginName)
         await Logger.initialize(pluginName)
         await Settings.initialize()
         await Translator.initialize(translations)
