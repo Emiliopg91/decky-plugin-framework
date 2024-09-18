@@ -36,7 +36,7 @@ export class Settings {
     return JSON.parse(JSON.stringify(this.configuration));
   }
 
-  public static getConfigurationStructured(): Record<string, string> {
+  public static getConfigurationStructured(): any {
     const structured: any = {};
     let record = Settings.configuration;
     for (const key in record) {
