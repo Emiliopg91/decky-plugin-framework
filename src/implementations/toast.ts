@@ -1,4 +1,4 @@
-import { ServerAPI } from "decky-frontend-lib";
+import { toaster } from "@decky/api";
 
 /**
  * Represents a toast notification utility.
@@ -11,11 +11,6 @@ export class Toast {
   private static appName: string;
 
   /**
-   * ServerAPI
-   */
-  private static serverApi: ServerAPI;
-
-  /**
    * Private constructor to prevent instantiation
    */
   private constructor() {
@@ -26,9 +21,8 @@ export class Toast {
    * @param appName - Plugin name
    * @param serverApi - ServerAPI of plugin
    */
-  public static initialize(appName: string, serverApi: ServerAPI) {
+  public static initialize(appName: string) {
     Toast.appName = appName;
-    Toast.serverApi = serverApi;
   }
 
   /**
@@ -38,6 +32,6 @@ export class Toast {
    * @param clickAction - The action to perform when the toast notification is clicked (default is an empty function).
    */
   public static toast(msg: any, ms: number = 3000, clickAction = () => { }) {
-    Toast.serverApi.toaster.toast({ title: Toast.appName, body: msg, duration: ms, onClick: clickAction });
+    toaster.toast({ title: Toast.appName, body: msg, duration: ms, onClick: clickAction });
   }
 }
