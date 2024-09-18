@@ -17,7 +17,7 @@ export class Backend {
    */
   public static backend_call<I extends any[], O>(
     name: string,
-    params: I
+    ...params: I
   ): Promise<O> {
     return call<I, O>(name, ...params);
   }

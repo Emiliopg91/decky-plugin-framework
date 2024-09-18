@@ -1,4 +1,3 @@
-import { Backend } from "./backend";
 import { Logger } from "./logger";
 import { Toast } from "./toast";
 import { Translator } from "./translator";
