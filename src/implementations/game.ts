@@ -1,8 +1,8 @@
-import { LifetimeNotification, Router } from "decky-frontend-lib";
 import { EventBus } from "./eventBus"
 import { EventType } from "../types/eventBus";
-import { GameLifeEventData, GameEntry } from "../types/game";
+import { GameLifeEventData, GameEntry, LifetimeNotification } from "../types/game";
 import { SteamClient } from "../globals/steamClient"
+import { Router } from "@decky/ui";
 
 declare var SteamClient: SteamClient
 
