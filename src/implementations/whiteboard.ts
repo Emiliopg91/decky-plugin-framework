@@ -1,15 +1,6 @@
-import { useState } from "react";
 import { EventBus } from "./eventBus";
 import { EventType } from "../types/eventBus";
 import { WhiteBoardEventData } from "../types/whiteboard";
-
-/**
- * Internal interface for whiteboard entries
- */
-interface WhiteBoardEntry {
-    object: any
-    setter: React.Dispatch<React.SetStateAction<any>>
-}
 
 /**
  * Class for share updatable information
@@ -19,7 +10,7 @@ export class WhiteBoard {
     /**
      * List of entries on whiteboard
      */
-    private static entries: Record<string, WhiteBoardEntry> = {}
+    private static entries: Record<string, any> = {}
 
     /**
      * Clear whiteboard and stop subscriptions
@@ -36,13 +27,10 @@ export class WhiteBoard {
      */
     public static set<T>(id: string, value: T) {
         const entry = WhiteBoard.entries[id]
-        if (entry === null || entry === undefined) {
-            const [object, setter] = useState<T>(value)
-            WhiteBoard.entries[id] = { object, setter }
-        } else {
-            entry.setter(value)
-        }
-        this.publishEvent<T>(id, value);
+        WhiteBoard.entries[id] = value
+
+        if (entry != value)
+            this.publishEvent<T>(id, value);
     }
 
     /**
@@ -55,7 +43,7 @@ export class WhiteBoard {
         if (entry === undefined) {
             return null;
         } else {
-            return entry.object;
+            return entry;
         }
     }
 
