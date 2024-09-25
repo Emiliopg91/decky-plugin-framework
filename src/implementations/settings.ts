@@ -11,7 +11,7 @@ export class Settings {
   /**
    * Map of configuration
    */
-  private static configuration: Record<string, string> = {};
+  private static configuration: Record<string, any> = {};
 
   /**
    * Load configuration from file
@@ -59,6 +59,53 @@ export class Settings {
 
     return structured;
   }
+  
+
+  // Método estático que devuelve un objeto proxy que observa cambios en el JSON
+  public static getProxiedSettings(obj: any = {}, basePath: string = ''): any {
+    const handler: ProxyHandler<any> = {
+      get(target, property, receiver) {
+        // Si la propiedad no existe, se crea como un objeto vacío
+        if (!(property in target)) {
+          target[property] = {};
+        }
+
+        const value = Reflect.get(target, property, receiver);
+
+        // Si el valor es un objeto, lo envolvemos en un proxy recursivo
+        if (typeof value === 'object' && value !== null) {
+          const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
+          return Settings.getProxiedSettings(value, newPath);
+        }
+
+        return value;
+      },
+      set(target, property, value, receiver) {
+        const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
+
+        // Actualiza el valor en el objeto
+        const success = Reflect.set(target, property, value, receiver);
+
+        // Llama a setValue con la ruta completa y el nuevo valor
+        Settings.setEntry(newPath, value);
+
+        return success;
+      },
+      deleteProperty(target, property) {
+        const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
+
+        // Elimina la propiedad del objeto
+        const success = Reflect.deleteProperty(target, property);
+
+        // Llama a deleteValue con la ruta completa
+        //Settings.deleteValue(newPath);
+
+        return success;
+      }
+    };
+
+    return new Proxy(obj, handler);
+  }
 
   /**
    * Get configuration entry
@@ -67,10 +114,10 @@ export class Settings {
    * @returns Entry or default value
    */
   public static getEntry<T>(
-    key: keyof T,
-    defaultValue: string | null = null
-  ): string | null {
-    let result = Settings.configuration[String(key)];
+    key: string,
+    defaultValue: T | null = null
+  ): T | null {
+    let result = Settings.configuration[key];
     if (result != null && result != undefined) return result;
     return defaultValue;
   }
@@ -82,15 +129,15 @@ export class Settings {
    * @param persist - If the value will be persisted to file
    */
   public static async setEntry<T>(
-    key: keyof T,
-    value: string,
+    key: string,
+    value: T,
     persist: boolean = false
   ) {
     Logger.info("Setting configuration '" + String(key) + "'='" + value + "'");
-    Settings.configuration[String(key)] = value;
+    Settings.configuration[key] = value;
     if (persist) {
       Logger.info("Persisting to config file");
-      Backend.backend_call<[key: string, value: string], null>(
+      Backend.backend_call<[key: string, value: T], null>(
         "set_config",
         String(key),
         value

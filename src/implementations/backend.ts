@@ -1,4 +1,4 @@
-import { call } from "@decky/api";
+import { addEventListener, call, removeEventListener } from "@decky/api";
 
 /**
  * The Backend class provides access to plugin Python backend methods
@@ -7,7 +7,7 @@ export class Backend {
   /**
    * Private constructor to prevent instantiation
    */
-  private constructor() {}
+  private constructor() { }
 
   /**
    * Generic method to make backend calls to Python plugin methods
@@ -20,5 +20,10 @@ export class Backend {
     ...params: I
   ): Promise<O> {
     return call<I, O>(name, ...params);
+  }
+
+  public static backend_wait(category: string, callBack: (...args: any[]) => void): () => void {
+    addEventListener(category, callBack)
+    return () => { removeEventListener(category, callBack) }
   }
 }
