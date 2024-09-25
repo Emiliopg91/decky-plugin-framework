@@ -92,7 +92,7 @@ export class Settings {
         return success;
       },
       deleteProperty(target, property) {
-        const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
+        //const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
 
         // Elimina la propiedad del objeto
         const success = Reflect.deleteProperty(target, property);
