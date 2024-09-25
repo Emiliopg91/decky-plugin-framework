@@ -64,13 +64,8 @@ export class Settings {
   // Método estático que devuelve un objeto proxy que observa cambios en el JSON
   public static getProxiedSettings(obj: any = {}, basePath: string = ''): any {
     const handler: ProxyHandler<any> = {
-      get(target, property, receiver) {
-        // Si la propiedad no existe, se crea como un objeto vacío
-        if (!(property in target)) {
-          target[property] = {};
-        }
-
-        const value = Reflect.get(target, property, receiver);
+      get(target, property) {
+        const value = Reflect.get(target, property);
 
         // Si el valor es un objeto, lo envolvemos en un proxy recursivo
         if (typeof value === 'object' && value !== null) {
