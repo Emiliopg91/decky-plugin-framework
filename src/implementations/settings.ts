@@ -20,7 +20,7 @@ export class Settings {
     Settings.configuration = await Backend.backend_call<[], any>("get_config");
     Logger.info(
       "Loaded configuration from file: " +
-        JSON.stringify(Settings.configuration)
+      JSON.stringify(Settings.configuration)
     );
     Settings.notifyChanges();
   }
@@ -59,7 +59,7 @@ export class Settings {
 
     return structured;
   }
-  
+
 
   // Método estático que devuelve un objeto proxy que observa cambios en el JSON
   public static getProxiedSettings(obj: any = {}, basePath: string = ''): any {
@@ -76,15 +76,16 @@ export class Settings {
         return value;
       },
       set(target, property, value, receiver) {
-        const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
-
-        // Actualiza el valor en el objeto
-        const success = Reflect.set(target, property, value, receiver);
-
-        // Llama a setValue con la ruta completa y el nuevo valor
-        Settings.setEntry(newPath, value, true);
-
-        return success;
+        const prevValue = Reflect.get(target, property)
+        if (value != prevValue) {
+          const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
+          const success = Reflect.set(target, property, value, receiver);
+          Settings.setEntry(newPath, value, true);
+          return success;
+        }
+        else {
+          return true
+        }
       },
       deleteProperty(target, property) {
         //const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
