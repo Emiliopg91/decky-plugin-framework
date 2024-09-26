@@ -82,7 +82,7 @@ export class Settings {
         const success = Reflect.set(target, property, value, receiver);
 
         // Llama a setValue con la ruta completa y el nuevo valor
-        Settings.setEntry(newPath, value);
+        Settings.setEntry(newPath, value, true);
 
         return success;
       },
