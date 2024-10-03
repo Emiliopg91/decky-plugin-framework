@@ -88,15 +88,18 @@ export class Settings {
         }
       },
       deleteProperty(target, property) {
-        //const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
+        const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
+        if(Reflect.get(target, property)){
+          // Elimina la propiedad del objeto
+          const success = Reflect.deleteProperty(target, property);
 
-        // Elimina la propiedad del objeto
-        const success = Reflect.deleteProperty(target, property);
+          // Llama a deleteValue con la ruta completa
+          Settings.deleteEntry(newPath);
 
-        // Llama a deleteValue con la ruta completa
-        //Settings.deleteValue(newPath);
-
-        return success;
+          return success;
+        } else {
+          return true
+        }
       }
     };
 
@@ -129,7 +132,7 @@ export class Settings {
     value: T,
     persist: boolean = false
   ) {
-    Logger.info("Setting configuration '" + String(key) + "'='" + value + "'");
+    Logger.info("Setting configuration '" + String(key) + "'="+JSON.stringify(value));
     Settings.configuration[key] = value;
     if (persist) {
       Logger.info("Persisting to config file");
@@ -140,6 +143,29 @@ export class Settings {
       );
     }
     Settings.notifyChanges();
+  }
+
+  /**
+   * delete configuration entry
+   * @param key - Name of the property
+   * @param persist - If the value will be persisted to file
+   */
+  public static deleteEntry<T>(
+    key: string,
+    persist: boolean = false
+  ):T|null {
+    Logger.info("Deleting configuration '" + String(key));
+    const oldValue:T|null = Settings.getEntry(key)
+    delete Settings.configuration[key]
+    if (persist) {
+      Logger.info("Persisting to config file");
+      Backend.backend_call<[key: string], null>(
+        "delete_config",
+        String(key)
+      );
+    }
+    Settings.notifyChanges();
+    return oldValue
   }
 
   /**
