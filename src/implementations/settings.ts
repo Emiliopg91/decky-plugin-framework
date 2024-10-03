@@ -93,7 +93,7 @@ export class Settings {
         const success = Reflect.deleteProperty(target, property);
 
         // Llama a deleteValue con la ruta completa
-        Settings.deleteEntry(newPath);
+        Settings.deleteEntry(newPath, true);
 
         return success;
       }
