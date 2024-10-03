@@ -89,17 +89,13 @@ export class Settings {
       },
       deleteProperty(target, property) {
         const newPath = basePath ? `${basePath}.${String(property)}` : String(property);
-        if(Reflect.get(target, property)){
-          // Elimina la propiedad del objeto
-          const success = Reflect.deleteProperty(target, property);
+        // Elimina la propiedad del objeto
+        const success = Reflect.deleteProperty(target, property);
 
-          // Llama a deleteValue con la ruta completa
-          Settings.deleteEntry(newPath);
+        // Llama a deleteValue con la ruta completa
+        Settings.deleteEntry(newPath);
 
-          return success;
-        } else {
-          return true
-        }
+        return success;
       }
     };
 
@@ -132,7 +128,7 @@ export class Settings {
     value: T,
     persist: boolean = false
   ) {
-    Logger.info("Setting configuration '" + String(key) + "'="+JSON.stringify(value));
+    Logger.info("Setting configuration " + JSON.stringify(key) + "="+JSON.stringify(value));
     Settings.configuration[key] = value;
     if (persist) {
       Logger.info("Persisting to config file");
@@ -154,7 +150,7 @@ export class Settings {
     key: string,
     persist: boolean = false
   ):T|null {
-    Logger.info("Deleting configuration '" + String(key));
+    Logger.info("Deleting configuration '" + String(key))+"'";
     const oldValue:T|null = Settings.getEntry(key)
     delete Settings.configuration[key]
     if (persist) {
