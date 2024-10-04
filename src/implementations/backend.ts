@@ -32,16 +32,16 @@ export class Backend {
             }
           })
         }
-        Logger.debug("Invoking backend method " + name + "(" + paramsStr + ")")
+        Logger.debug("Backend invocation: " + name + "(" + paramsStr + ")")
       }
       call<I, O>(name, ...params).then((value:O)=>{
         if(name!="log"){
-          Logger.debug("Invocation finished in " + (Date.now() - t0) + " ms with result: ", value)
+          Logger.debug("Backend invocation finished in " + (Date.now() - t0) + " ms with result: " + JSON.stringify(value))
         }
         resolve(value)
       }).catch((reason:any)=>{
         if(name!="log"){
-            Logger.debug("Invocation finished in " + (Date.now() - t0) + " ms with error: ", reason)
+            Logger.error("Backend invocation failed after " + (Date.now() - t0) + " ms with error: " + JSON.stringify(reason))
         }
         reject(reason)
       })
