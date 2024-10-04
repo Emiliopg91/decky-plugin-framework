@@ -28,6 +28,7 @@ export class Framework {
         await Toast.initialize(pluginName)
         await Logger.initialize(pluginName)
         await Settings.initialize()
+        await Logger.initialize(pluginName)
         await Translator.initialize(translations)
         await Game.initialize()
         await InputListener.initialize()

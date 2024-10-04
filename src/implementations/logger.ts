@@ -69,7 +69,7 @@ export class Logger {
    */
   public static async initialize(prefix: string) {
     Logger.prefix = prefix;
-    this.loadLogLevel();
+    await Logger.loadLogLevel();
     Logger.info(
       "Logger initialized at level '" + LogLevel[Logger.currentLevel] + "'"
     );
