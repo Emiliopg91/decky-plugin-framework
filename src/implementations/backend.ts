@@ -1,4 +1,5 @@
 import { addEventListener, call, removeEventListener } from "@decky/api";
+import { Logger } from "./logger";
 
 /**
  * The Backend class provides access to plugin Python backend methods
@@ -19,7 +20,32 @@ export class Backend {
     name: string,
     ...params: I
   ): Promise<O> {
-    return call<I, O>(name, ...params);
+    const t0 = Date.now()
+    return new Promise<O>((resolve, reject)=>{
+      if(name!="log"){
+        let paramsStr=""
+        if(params){
+          params.forEach((val,idx)=>{
+            paramsStr=paramsStr+JSON.stringify(val);
+            if(idx<params.length-1){
+              paramsStr=paramsStr+", "
+            }
+          })
+        }
+        Logger.debug("Invoking backend method " + name + "(" + paramsStr + ")")
+      }
+      call<I, O>(name, ...params).then((value:O)=>{
+        if(name!="log"){
+          Logger.debug("Invocation finished in " + (Date.now() - t0) + " ms with result: ", value)
+        }
+        resolve(value)
+      }).catch((reason:any)=>{
+        if(name!="log"){
+            Logger.debug("Invocation finished in " + (Date.now() - t0) + " ms with error: ", reason)
+        }
+        reject(reason)
+      })
+    })
   }
 
   public static backend_wait(category: string, callBack: (...args: any[]) => void): () => void {
