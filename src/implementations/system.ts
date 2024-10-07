@@ -7,6 +7,7 @@ import { NetworkInfo } from "../types/settings";
 import { SteamClient } from "../globals/steamClient"
 import { SystemStoragStore } from "../globals/systemStoragStore"
 import { LoginStore } from "../globals/loginStore"
+import { SystemCfg } from "../types/framework";
 
 declare var SteamClient: SteamClient
 declare var SystemNetworkStore: SystemNetworkStore
@@ -21,6 +22,11 @@ export class System {
      * Current user name
      */
     private static currentUser: string = "annonymous";
+
+    /**
+     * Unsubscriber function for Network changes
+     */
+    private static unregisterNetwork: () => void;
 
     /**
      * Unsubscriber function for Login changes
@@ -42,54 +48,60 @@ export class System {
      */
     private static unregisterNetworkState: () => void;
 
-    /**
-     * Interval function for network changes.
-     */
-    private static networkInterval: any;
-
     private static connectedInet: boolean = false;
 
     /**
      * Initialize class and subscriptions
      * @returns Promise for readiness
      */
-    public static async initialize() {
-        System.currentUser = loginStore.accountName
-        System.unregisterLogin = SteamClient.User.RegisterForLoginStateChange((username: string) => {
-            System.currentUser = username;
-            EventBus.publishEvent(EventType.LOGIN, new LoginEventData(username));
-        }).unregister
+    public static async initialize(cfg: SystemCfg) {
+        if(cfg.login){
+            System.currentUser = loginStore.accountName
+            System.unregisterLogin = SteamClient.User.RegisterForLoginStateChange((username: string) => {
+                System.currentUser = username;
+                EventBus.publishEvent(EventType.LOGIN, new LoginEventData(username));
+            }).unregister
+        }
 
-        System.unregisterSuspend = SteamClient.System.RegisterForOnSuspendRequest(() => {
-            EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(true));
-        }).unregister
+        if(cfg.suspension){
+            System.unregisterSuspend = SteamClient.System.RegisterForOnSuspendRequest(() => {
+                EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(true));
+            }).unregister
 
-        System.unregisterResume = SteamClient.System.RegisterForOnResumeFromSuspend(() => {
-            EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(false));
-        }).unregister
+        }
 
-        System.unregisterNetworkState = SteamClient.System.Network.RegisterForConnectivityTestChanges((e: any) => {
-            if (!e.bChecking) {
-                const connected = e.eConnectivityTestResult === 0 || e.eConnectivityTestResult === 1
-                if (System.connectedInet != connected) {
-                    System.connectedInet = connected
-                    EventBus.publishEvent(EventType.NETWORK, new NetworkEventData(connected));
+        if(cfg.resume){
+            System.unregisterResume = SteamClient.System.RegisterForOnResumeFromSuspend(() => {
+                EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(false));
+            }).unregister
+
+        }
+
+        if(cfg.network){
+            System.unregisterNetworkState = SteamClient.System.Network.RegisterForConnectivityTestChanges((e: any) => {
+                if (!e.bChecking) {
+                    const connected = e.eConnectivityTestResult === 0 || e.eConnectivityTestResult === 1
+                    if (System.connectedInet != connected) {
+                        System.connectedInet = connected
+                        EventBus.publishEvent(EventType.NETWORK, new NetworkEventData(connected));
+                    }
                 }
-            }
-        }).unregister
-        SteamClient.System.Network.ForceTestConnectivity()
-        System.networkInterval = setInterval(() => { SteamClient.System.Network.ForceTestConnectivity() }, 10000)
+            }).unregister
+            SteamClient.System.Network.ForceTestConnectivity()
+            const networkInterval = setInterval(() => { SteamClient.System.Network.ForceTestConnectivity() }, 10000)
+            System.unregisterNetwork = ()=>{clearInterval(networkInterval)}
+        }
     }
 
     /**
      * Stop subscriptions
      */
     public static stop() {
-        clearInterval(System.networkInterval)
         System.unregisterLogin()
         System.unregisterSuspend()
         System.unregisterResume()
         System.unregisterNetworkState()
+        System.unregisterNetwork()
         EventBus.unsubscribeAll(EventType.SUSPEND)
         EventBus.unsubscribeAll(EventType.LOGIN)
     }

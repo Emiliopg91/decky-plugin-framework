@@ -16,7 +16,7 @@ importers:
         version: 4.7.2
       react-icons:
         specifier: ^4.12.0
-        version: 4.12.0
+        version: 4.12.0(react@18.3.1)
     devDependencies:
       '@commitlint/cli':
         specifier: ^17.0.2
@@ -26,7 +26,7 @@ importers:
         version: 17.0.2
       '@commitlint/cz-commitlint':
         specifier: ^17.0.0
-        version: 17.0.0(commitizen@4.2.4)(inquirer@8.2.6)
+        version: 17.0.0(commitizen@4.2.4(@types/node@20.5.1)(typescript@4.9.5))(inquirer@8.2.6)
       '@decky/rollup':
         specifier: ^1.0.0
         version: 1.0.0
@@ -42,12 +42,15 @@ importers:
       '@types/react':
         specifier: 16.14.0
         version: 16.14.0
+      '@types/react-dom':
+        specifier: 18.3.0
+        version: 18.3.0
       '@types/react-router':
         specifier: 5.1.18
         version: 5.1.18
       commitizen:
         specifier: ^4.2.4
-        version: 4.2.4(@types/node@20.12.7)(typescript@4.9.5)
+        version: 4.2.4(@types/node@20.5.1)(typescript@4.9.5)
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -56,7 +59,7 @@ importers:
         version: 6.0.0
       jest:
         specifier: ^27.5.1
-        version: 27.5.1(ts-node@10.9.2)
+        version: 27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))
       minimist:
         specifier: ^1.2.6
         version: 1.2.8
@@ -74,19 +77,19 @@ importers:
         version: 0.3.4
       ts-jest:
         specifier: ^27.1.4
-        version: 27.1.4(@babel/core@7.24.4)(@types/jest@27.4.1)(jest@27.5.1)(typescript@4.9.5)
+        version: 27.1.4(@babel/core@7.24.4)(@types/jest@27.4.1)(babel-jest@27.5.1(@babel/core@7.24.4))(jest@27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5)))(typescript@4.9.5)
       typedoc:
         specifier: ^0.23.24
         version: 0.23.24(typescript@4.9.5)
       typedoc-plugin-mdn-links:
         specifier: ^2.0.0
-        version: 2.0.0(typedoc@0.23.24)
+        version: 2.0.0(typedoc@0.23.24(typescript@4.9.5))
       typedoc-plugin-missing-exports:
         specifier: ^1.0.0
-        version: 1.0.0(typedoc@0.23.24)
+        version: 1.0.0(typedoc@0.23.24(typescript@4.9.5))
       typedoc-wikijs-theme:
         specifier: ^1.0.5
-        version: 1.0.5(typedoc-plugin-markdown@4.0.0-next.59)(typedoc@0.23.24)
+        version: 1.0.5(typedoc-plugin-markdown@4.0.0-next.59(typedoc@0.23.24(typescript@4.9.5)))(typedoc@0.23.24(typescript@4.9.5))
       typescript:
         specifier: ^4.9.5
         version: 4.9.5
@@ -802,6 +805,9 @@ packages:
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
+
+  '@types/react-dom@18.3.0':
+    resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
 
   '@types/react-router@5.1.18':
     resolution: {integrity: sha512-YYknwy0D0iOwKQgz9v8nOzt2J6l4gouBmDnWqUUznltOTaon+r8US8ky8HvN0tXvc38U9m6z/t2RsVsnd1zM0g==}
@@ -2376,6 +2382,10 @@ packages:
     resolution: {integrity: sha512-Ajzxb8CM6WAnFjgiloPsI3bF+WCxcvhdIG3KNA2KN962+tdBsHcuQ4k4qX/EcS/2CRkcc0iAkR956Nib6aXU/Q==}
     engines: {node: '>=0.10.0'}
 
+  loose-envify@1.4.0:
+    resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
+    hasBin: true
+
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
@@ -2853,12 +2863,13 @@ packages:
     resolution: {integrity: sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==}
     peerDependencies:
       react: '*'
-    peerDependenciesMeta:
-      react:
-        optional: true
 
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
+
+  react@18.3.1:
+    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
+    engines: {node: '>=0.10.0'}
 
   read-pkg-up@7.0.1:
     resolution: {integrity: sha512-zK0TB7Xd6JpCLmlLmufqykGE+/TlOePD6qKClNW7hHDKFh/J7/7gCWGR7joEQEW1bKq3a3yUZSObOoWLFQ4ohg==}
@@ -3875,13 +3886,13 @@ snapshots:
       ajv: 8.12.0
     optional: true
 
-  '@commitlint/cz-commitlint@17.0.0(commitizen@4.2.4)(inquirer@8.2.6)':
+  '@commitlint/cz-commitlint@17.0.0(commitizen@4.2.4(@types/node@20.5.1)(typescript@4.9.5))(inquirer@8.2.6)':
     dependencies:
       '@commitlint/ensure': 17.8.1
       '@commitlint/load': 17.8.1
       '@commitlint/types': 17.8.1
       chalk: 4.1.2
-      commitizen: 4.2.4(@types/node@20.12.7)(typescript@4.9.5)
+      commitizen: 4.2.4(@types/node@20.5.1)(typescript@4.9.5)
       inquirer: 8.2.6
       lodash: 4.17.21
       word-wrap: 1.2.5
@@ -3929,18 +3940,18 @@ snapshots:
       '@types/node': 20.5.1
       chalk: 4.1.2
       cosmiconfig: 8.3.6(typescript@4.9.5)
-      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6)(ts-node@10.9.2)(typescript@4.9.5)
+      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@4.9.5))(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))(typescript@4.9.5)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
       resolve-from: 5.0.0
-      ts-node: 10.9.2(@types/node@20.12.7)(typescript@4.9.5)
+      ts-node: 10.9.2(@types/node@20.5.1)(typescript@4.9.5)
       typescript: 4.9.5
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
 
-  '@commitlint/load@19.2.0(@types/node@20.12.7)(typescript@4.9.5)':
+  '@commitlint/load@19.2.0(@types/node@20.5.1)(typescript@4.9.5)':
     dependencies:
       '@commitlint/config-validator': 19.0.3
       '@commitlint/execute-rule': 19.0.0
@@ -3948,7 +3959,7 @@ snapshots:
       '@commitlint/types': 19.0.3
       chalk: 5.3.0
       cosmiconfig: 9.0.0(typescript@4.9.5)
-      cosmiconfig-typescript-loader: 5.0.0(@types/node@20.12.7)(cosmiconfig@9.0.0)(typescript@4.9.5)
+      cosmiconfig-typescript-loader: 5.0.0(@types/node@20.5.1)(cosmiconfig@9.0.0(typescript@4.9.5))(typescript@4.9.5)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -4067,7 +4078,7 @@ snapshots:
       jest-util: 27.5.1
       slash: 3.0.0
 
-  '@jest/core@27.5.1(ts-node@10.9.2)':
+  '@jest/core@27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))':
     dependencies:
       '@jest/console': 27.5.1
       '@jest/reporters': 27.5.1
@@ -4081,7 +4092,7 @@ snapshots:
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-changed-files: 27.5.1
-      jest-config: 27.5.1(ts-node@10.9.2)
+      jest-config: 27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))
       jest-haste-map: 27.5.1
       jest-message-util: 27.5.1
       jest-regex-util: 27.5.1
@@ -4336,11 +4347,13 @@ snapshots:
       glob: 10.4.5
       is-reference: 1.2.1
       magic-string: 0.30.11
+    optionalDependencies:
       rollup: 4.21.3
 
   '@rollup/plugin-json@6.1.0(rollup@4.21.3)':
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.21.3)
+    optionalDependencies:
       rollup: 4.21.3
 
   '@rollup/plugin-node-resolve@15.2.3(rollup@4.21.3)':
@@ -4351,27 +4364,31 @@ snapshots:
       is-builtin-module: 3.2.1
       is-module: 1.0.0
       resolve: 1.22.8
+    optionalDependencies:
       rollup: 4.21.3
 
   '@rollup/plugin-replace@5.0.7(rollup@4.21.3)':
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.21.3)
       magic-string: 0.30.11
+    optionalDependencies:
       rollup: 4.21.3
 
   '@rollup/plugin-typescript@11.1.6(rollup@4.21.3)(tslib@2.7.0)(typescript@5.6.2)':
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.21.3)
       resolve: 1.22.8
+      typescript: 5.6.2
+    optionalDependencies:
       rollup: 4.21.3
       tslib: 2.7.0
-      typescript: 5.6.2
 
   '@rollup/pluginutils@5.1.0(rollup@4.21.3)':
     dependencies:
       '@types/estree': 1.0.5
       estree-walker: 2.0.2
       picomatch: 2.3.1
+    optionalDependencies:
       rollup: 4.21.3
 
   '@rollup/rollup-android-arm-eabi@4.21.3':
@@ -4605,6 +4622,10 @@ snapshots:
   '@types/prettier@2.7.3': {}
 
   '@types/prop-types@15.7.12': {}
+
+  '@types/react-dom@18.3.0':
+    dependencies:
+      '@types/react': 16.14.0
 
   '@types/react-router@5.1.18':
     dependencies:
@@ -4967,10 +4988,10 @@ snapshots:
     dependencies:
       delayed-stream: 1.0.0
 
-  commitizen@4.2.4(@types/node@20.12.7)(typescript@4.9.5):
+  commitizen@4.2.4(@types/node@20.5.1)(typescript@4.9.5):
     dependencies:
       cachedir: 2.2.0
-      cz-conventional-changelog: 3.2.0(@types/node@20.12.7)(typescript@4.9.5)
+      cz-conventional-changelog: 3.2.0(@types/node@20.5.1)(typescript@4.9.5)
       dedent: 0.7.0
       detect-indent: 6.0.0
       find-node-modules: 2.1.3
@@ -5057,16 +5078,16 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6)(ts-node@10.9.2)(typescript@4.9.5):
+  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@4.9.5))(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))(typescript@4.9.5):
     dependencies:
       '@types/node': 20.5.1
       cosmiconfig: 8.3.6(typescript@4.9.5)
-      ts-node: 10.9.2(@types/node@20.12.7)(typescript@4.9.5)
+      ts-node: 10.9.2(@types/node@20.5.1)(typescript@4.9.5)
       typescript: 4.9.5
 
-  cosmiconfig-typescript-loader@5.0.0(@types/node@20.12.7)(cosmiconfig@9.0.0)(typescript@4.9.5):
+  cosmiconfig-typescript-loader@5.0.0(@types/node@20.5.1)(cosmiconfig@9.0.0(typescript@4.9.5))(typescript@4.9.5):
     dependencies:
-      '@types/node': 20.12.7
+      '@types/node': 20.5.1
       cosmiconfig: 9.0.0(typescript@4.9.5)
       jiti: 1.21.0
       typescript: 4.9.5
@@ -5093,6 +5114,7 @@ snapshots:
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
+    optionalDependencies:
       typescript: 4.9.5
 
   cosmiconfig@9.0.0(typescript@4.9.5):
@@ -5101,6 +5123,7 @@ snapshots:
       import-fresh: 3.3.0
       js-yaml: 4.1.0
       parse-json: 5.2.0
+    optionalDependencies:
       typescript: 4.9.5
     optional: true
 
@@ -5124,16 +5147,16 @@ snapshots:
 
   csstype@3.1.3: {}
 
-  cz-conventional-changelog@3.2.0(@types/node@20.12.7)(typescript@4.9.5):
+  cz-conventional-changelog@3.2.0(@types/node@20.5.1)(typescript@4.9.5):
     dependencies:
       chalk: 2.4.2
-      commitizen: 4.2.4(@types/node@20.12.7)(typescript@4.9.5)
+      commitizen: 4.2.4(@types/node@20.5.1)(typescript@4.9.5)
       conventional-commit-types: 3.0.0
       lodash.map: 4.6.0
       longest: 2.0.1
       word-wrap: 1.2.5
     optionalDependencies:
-      '@commitlint/load': 19.2.0(@types/node@20.12.7)(typescript@4.9.5)
+      '@commitlint/load': 19.2.0(@types/node@20.5.1)(typescript@4.9.5)
     transitivePeerDependencies:
       - '@types/node'
       - typescript
@@ -6072,16 +6095,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  jest-cli@27.5.1(ts-node@10.9.2):
+  jest-cli@27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5)):
     dependencies:
-      '@jest/core': 27.5.1(ts-node@10.9.2)
+      '@jest/core': 27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))
       '@jest/test-result': 27.5.1
       '@jest/types': 27.5.1
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.11
       import-local: 3.1.0
-      jest-config: 27.5.1(ts-node@10.9.2)
+      jest-config: 27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))
       jest-util: 27.5.1
       jest-validate: 27.5.1
       prompts: 2.4.2
@@ -6093,7 +6116,7 @@ snapshots:
       - ts-node
       - utf-8-validate
 
-  jest-config@27.5.1(ts-node@10.9.2):
+  jest-config@27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5)):
     dependencies:
       '@babel/core': 7.24.4
       '@jest/test-sequencer': 27.5.1
@@ -6119,7 +6142,8 @@ snapshots:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.2(@types/node@20.12.7)(typescript@4.9.5)
+    optionalDependencies:
+      ts-node: 10.9.2(@types/node@20.5.1)(typescript@4.9.5)
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -6240,7 +6264,7 @@ snapshots:
       '@types/node': 20.12.7
 
   jest-pnp-resolver@1.2.3(jest-resolve@27.5.1):
-    dependencies:
+    optionalDependencies:
       jest-resolve: 27.5.1
 
   jest-regex-util@27.5.1: {}
@@ -6388,11 +6412,11 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jest@27.5.1(ts-node@10.9.2):
+  jest@27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5)):
     dependencies:
-      '@jest/core': 27.5.1(ts-node@10.9.2)
+      '@jest/core': 27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))
       import-local: 3.1.0
-      jest-cli: 27.5.1(ts-node@10.9.2)
+      jest-cli: 27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -6542,6 +6566,10 @@ snapshots:
       is-unicode-supported: 0.1.0
 
   longest@2.0.1: {}
+
+  loose-envify@1.4.0:
+    dependencies:
+      js-tokens: 4.0.0
 
   lru-cache@10.4.3: {}
 
@@ -6893,9 +6921,15 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-icons@4.12.0: {}
+  react-icons@4.12.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react-is@17.0.2: {}
+
+  react@18.3.1:
+    dependencies:
+      loose-envify: 1.4.0
 
   read-pkg-up@7.0.1:
     dependencies:
@@ -7412,13 +7446,11 @@ snapshots:
 
   trim-newlines@3.0.1: {}
 
-  ts-jest@27.1.4(@babel/core@7.24.4)(@types/jest@27.4.1)(jest@27.5.1)(typescript@4.9.5):
+  ts-jest@27.1.4(@babel/core@7.24.4)(@types/jest@27.4.1)(babel-jest@27.5.1(@babel/core@7.24.4))(jest@27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5)))(typescript@4.9.5):
     dependencies:
-      '@babel/core': 7.24.4
-      '@types/jest': 27.4.1
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 27.5.1(ts-node@10.9.2)
+      jest: 27.5.1(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))
       jest-util: 27.5.1
       json5: 2.2.3
       lodash.memoize: 4.1.2
@@ -7426,15 +7458,19 @@ snapshots:
       semver: 7.6.0
       typescript: 4.9.5
       yargs-parser: 20.2.9
+    optionalDependencies:
+      '@babel/core': 7.24.4
+      '@types/jest': 27.4.1
+      babel-jest: 27.5.1(@babel/core@7.24.4)
 
-  ts-node@10.9.2(@types/node@20.12.7)(typescript@4.9.5):
+  ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.12.7
+      '@types/node': 20.5.1
       acorn: 8.11.3
       acorn-walk: 8.3.2
       arg: 4.1.3
@@ -7506,22 +7542,22 @@ snapshots:
       typed-array-buffer: 1.0.2
       typed-array-byte-offset: 1.0.2
 
-  typedoc-plugin-markdown@4.0.0-next.59(typedoc@0.23.24):
+  typedoc-plugin-markdown@4.0.0-next.59(typedoc@0.23.24(typescript@4.9.5)):
     dependencies:
       typedoc: 0.23.24(typescript@4.9.5)
 
-  typedoc-plugin-mdn-links@2.0.0(typedoc@0.23.24):
+  typedoc-plugin-mdn-links@2.0.0(typedoc@0.23.24(typescript@4.9.5)):
     dependencies:
       typedoc: 0.23.24(typescript@4.9.5)
 
-  typedoc-plugin-missing-exports@1.0.0(typedoc@0.23.24):
+  typedoc-plugin-missing-exports@1.0.0(typedoc@0.23.24(typescript@4.9.5)):
     dependencies:
       typedoc: 0.23.24(typescript@4.9.5)
 
-  typedoc-wikijs-theme@1.0.5(typedoc-plugin-markdown@4.0.0-next.59)(typedoc@0.23.24):
+  typedoc-wikijs-theme@1.0.5(typedoc-plugin-markdown@4.0.0-next.59(typedoc@0.23.24(typescript@4.9.5)))(typedoc@0.23.24(typescript@4.9.5)):
     dependencies:
       typedoc: 0.23.24(typescript@4.9.5)
-      typedoc-plugin-markdown: 4.0.0-next.59(typedoc@0.23.24)
+      typedoc-plugin-markdown: 4.0.0-next.59(typedoc@0.23.24(typescript@4.9.5))
 
   typedoc@0.23.24(typescript@4.9.5):
     dependencies:

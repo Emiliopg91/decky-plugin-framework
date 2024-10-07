@@ -6,6 +6,7 @@ import { Game } from "./game";
 import { InputListener, ShortcutListener } from "./input";
 import { WhiteBoard } from "./whiteboard";
 import { System } from "./system";
+import { FrameworkCfg } from "../types/framework";
 
 /**
  * Wrapper class for initialitate and shutdown framework
@@ -23,16 +24,24 @@ export class Framework {
      * @param pluginVersion - Plugin version
      * @param translations - Map of translations
      */
-    public static async initialize(pluginName: string, pluginVersion: string, translations: Record<string, Record<string, string>>) {
-        await System.initialize()
-        await Toast.initialize(pluginName)
+    public static async initialize(pluginName: string, pluginVersion: string, settings:FrameworkCfg={}) {
         await Logger.initialize(pluginName)
         await Settings.initialize()
         await Logger.initialize(pluginName)
-        await Translator.initialize(translations)
-        await Game.initialize()
-        await InputListener.initialize()
-        await ShortcutListener.initialize()
+        
+        if(settings.system)
+            await System.initialize(settings.system)
+        if(settings.toast)
+            await Toast.initialize(pluginName, settings.toast)
+        if(settings.translator)
+            await Translator.initialize(settings.translator)
+        if(settings.game)
+            await Game.initialize(settings.game)
+        if(settings.input && settings.input.keyPress){
+            await InputListener.initialize()
+            if(settings.input.shortcut)
+                await ShortcutListener.initialize()
+        }
 
         Logger.info("Started plugin " + pluginName + " v" + pluginVersion);
     }

@@ -3,6 +3,7 @@ import { EventType } from "../types/eventBus";
 import { GameLifeEventData, GameEntry, LifetimeNotification } from "../types/game";
 import { SteamClient } from "../globals/steamClient"
 import { Router } from "@decky/ui";
+import { GameCfg } from "../types/framework";
 
 declare var SteamClient: SteamClient
 
@@ -23,11 +24,13 @@ export class Game {
     /**
      * Initialize class
      */
-    public static initialize() {
-        Game.unsubscriber = SteamClient.GameSessions.RegisterForAppLifetimeNotifications((e: LifetimeNotification) => {
-            const data: GameLifeEventData = new GameLifeEventData(e.unAppID, e.bRunning, e.nInstanceID)
-            EventBus.publishEvent(EventType.GAME_LIFE, data);
-        }).unregister;
+    public static initialize(settings:GameCfg) {
+        if(settings.lifeCycle){
+           Game.unsubscriber = SteamClient.GameSessions.RegisterForAppLifetimeNotifications((e: LifetimeNotification) => {
+                const data: GameLifeEventData = new GameLifeEventData(e.unAppID, e.bRunning, e.nInstanceID)
+                EventBus.publishEvent(EventType.GAME_LIFE, data);
+            }).unregister;
+        }
     }
 
     /**

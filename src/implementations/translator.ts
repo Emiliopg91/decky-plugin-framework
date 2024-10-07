@@ -1,3 +1,4 @@
+import { TranslatorCfg } from "../types/framework";
 import { Logger } from "./logger";
 import { System } from "./system";
 
@@ -32,10 +33,12 @@ export class Translator {
      * logs the language, and sets the currDictionary to the dictionary of the current language.
      * If the current language is not English and no translation is available, it falls back to English.
      */
-    public static initialize(translations: Record<string, Record<string, string>>) {
+    public static initialize(settings:TranslatorCfg) {
+        if(settings.translations){
         Translator.curLang = System.getLanguage();
         Logger.info("Initializing translator. Current language " + Translator.curLang);
-        Translator.dictionary = translations;
+        Translator.dictionary = settings.translations;
+        }
     }
 
     /**

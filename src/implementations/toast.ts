@@ -1,4 +1,6 @@
 import { toaster } from "@decky/api";
+import { ToastCfg } from "../types/framework";
+import { FunctionComponentElement } from "react";
 
 /**
  * Represents a toast notification utility.
@@ -16,13 +18,18 @@ export class Toast {
   private constructor() {
   }
 
+  private static logo:FunctionComponentElement<any>|undefined = undefined
+
   /**
    * Initialize class
    * @param appName - Plugin name
    * @param serverApi - ServerAPI of plugin
    */
-  public static initialize(appName: string) {
+  public static initialize(appName: string, settings?:ToastCfg) {
     Toast.appName = appName;
+    if(settings && settings.logo){
+      Toast.logo = settings.logo
+    }
   }
 
   /**
@@ -32,6 +39,6 @@ export class Toast {
    * @param clickAction - The action to perform when the toast notification is clicked (default is an empty function).
    */
   public static toast(msg: any, ms: number = 3000, clickAction = () => { }) {
-    toaster.toast({ title: Toast.appName, body: msg, duration: ms, onClick: clickAction });
+    toaster.toast({ title: Toast.appName, body: msg, duration: ms, onClick: clickAction, logo:Toast.logo });
   }
 }
