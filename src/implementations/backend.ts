@@ -20,13 +20,31 @@ export class Backend {
     name: string,
     ...params: I
   ): Promise<O> {
+    return Backend.backend_masked_call(name,[],params);
+  }
+
+  /**
+   * Generic method to make backend calls to Python plugin methods
+   * @param name - The name of the method to call
+   * @param params - The parameters to pass to the method
+   * @returns A Promise of the result type
+   */
+  public static backend_masked_call<I extends any[], O>(
+    name: string,
+    masked: number[],
+    ...params: I
+  ): Promise<O> {
     const t0 = Date.now()
     return new Promise<O>((resolve, reject)=>{
       if(name!="log"){
         let paramsStr=""
         if(params){
           params.forEach((val,idx)=>{
-            paramsStr=paramsStr+JSON.stringify(val);
+            if(masked.includes(idx)){
+              paramsStr="**hidden**"
+            } else {
+              paramsStr=paramsStr+JSON.stringify(val);
+            }
             if(idx<params.length-1){
               paramsStr=paramsStr+", "
             }
