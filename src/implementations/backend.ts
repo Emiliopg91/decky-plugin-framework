@@ -20,7 +20,7 @@ export class Backend {
     name: string,
     ...params: I
   ): Promise<O> {
-    return Backend.backend_masked_call(name,[],params);
+    return Backend.backend_masked_call(name,[],...params);
   }
 
   /**
