@@ -66,8 +66,19 @@ export class Backend {
     })
   }
 
-  public static backend_wait(category: string, callBack: (...args: any[]) => void): () => void {
-    addEventListener(category, callBack)
-    return () => { removeEventListener(category, callBack) }
+  public static backend_handle(category: string, callBack: (...args: any) => void): () => void {
+    const innerCallback = (...args:any) =>{
+      Logger.debug("Received backend event for '" + category + "': ", args)
+      try{
+        callBack(args);
+      }catch(reason:any){
+        Logger.error("Error handling backend event for '"+category+"'"+ JSON.stringify(reason))
+      }
+    }
+    Logger.debug("Subscribing backend events for '" + category + "'")
+    addEventListener(category, innerCallback)
+    return () => { 
+      Logger.debug("Unsubscribing backend events for '" + category + "'")
+      removeEventListener(category, innerCallback) }
   }
 }
