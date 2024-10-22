@@ -70,7 +70,7 @@ export class Backend {
     const innerCallback = (...args:any) =>{
       Logger.debug("Received backend event for '" + category + "': ", args)
       try{
-        callBack(args);
+        callBack(...args);
       }catch(reason:any){
         Logger.error("Error handling backend event for '"+category+"'"+ JSON.stringify(reason))
       }
