@@ -1,6 +1,6 @@
 import { EventBus } from "./eventBus";
 import { EventType } from "../types/eventBus";
-import { LoginEventData, NetworkEventData, SuspendEventData } from "../types/system";
+import { LoginEventData, NetworkEventData } from "../types/system";
 import { Utils } from "./utils";
 import { SystemNetworkStore } from "../globals/systemNetworkStore"
 import { NetworkInfo } from "../types/settings";
@@ -63,6 +63,7 @@ export class System {
             }).unregister
         }
 
+        /*
         if(cfg.suspension){
             System.unregisterSuspend = SteamClient.System.RegisterForOnSuspendRequest(() => {
                 EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(true));
@@ -76,6 +77,7 @@ export class System {
             }).unregister
 
         }
+        */
 
         if(cfg.network){
             System.unregisterNetworkState = SteamClient.System.Network.RegisterForConnectivityTestChanges((e: any) => {
