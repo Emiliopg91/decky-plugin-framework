@@ -1,6 +1,6 @@
 {
   "name": "decky-plugin-framework",
-  "version": "1.4.12",
+  "version": "1.4.13",
   "description": "Decky plugin common library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

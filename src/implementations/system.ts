@@ -72,46 +72,41 @@ export class System {
     }
 
     if (cfg.suspension) {
-      System.unregisterSuspend = SteamClient.System.RegisterForOnSuspendRequest(
-        () => {
-          function onSuspend() {
-            EventBus.publishEvent(
-              EventType.SUSPEND,
-              new SuspendEventData(true)
-            );
-          }
-
-          try {
-            const unregister =
-              SteamClient.System.RegisterForOnSuspendRequest(
-                onSuspend
-              ).unregister;
-            return unregister;
-          } catch (e) {}
-
-          try {
-            const suspendObservable = getSuspendObservable();
-
-            if (suspendObservable) {
-              const unregister = suspendObservable.observe_((change) => {
-                const { newValue: suspending } = change;
-                if (suspending) {
-                  onSuspend();
-                }
-              });
-              if (unregister) return unregister;
-            }
-          } catch (e) {}
-
-          try {
-            const unregisterOnSuspend =
-              SteamClient.User.RegisterForPrepareForSystemSuspendProgress(
-                onSuspend
-              ).unregister;
-            return unregisterOnSuspend;
-          } catch (e) {}
+      System.unregisterSuspend = (() => {
+        function onSuspend() {
+          EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(true));
         }
-      ).unregister;
+
+        try {
+          const unregister =
+            SteamClient.System.RegisterForOnSuspendRequest(
+              onSuspend
+            ).unregister;
+          return unregister;
+        } catch (e) {}
+
+        try {
+          const suspendObservable = getSuspendObservable();
+
+          if (suspendObservable) {
+            const unregister = suspendObservable.observe_((change) => {
+              const { newValue: suspending } = change;
+              if (suspending) {
+                onSuspend();
+              }
+            });
+            if (unregister) return unregister;
+          }
+        } catch (e) {}
+
+        try {
+          const unregisterOnSuspend =
+            SteamClient.User.RegisterForPrepareForSystemSuspendProgress(
+              onSuspend
+            ).unregister;
+          return unregisterOnSuspend;
+        } catch (e) {}
+      })();
     }
 
     if (cfg.resume) {
