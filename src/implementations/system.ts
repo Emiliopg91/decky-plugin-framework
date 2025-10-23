@@ -4,6 +4,8 @@ import {
   LoginEventData,
   NetworkEventData,
   SuspendEventData,
+  getSuspendObservable,
+  getResumeObservable,
 } from "../types/system";
 import { Utils } from "./utils";
 import { SystemNetworkStore } from "../globals/systemNetworkStore";
@@ -69,37 +71,89 @@ export class System {
       ).unregister;
     }
 
-    /*
-        if(cfg.suspension){
-            System.unregisterSuspend = SteamClient.System.RegisterForOnSuspendRequest(() => {
-                EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(true));
-            }).unregister
+    if (cfg.suspension) {
+      System.unregisterSuspend = SteamClient.System.RegisterForOnSuspendRequest(
+        () => {
+          function onSuspend() {
+            EventBus.publishEvent(
+              EventType.SUSPEND,
+              new SuspendEventData(true)
+            );
+          }
 
-        }*/
+          try {
+            const unregister =
+              SteamClient.System.RegisterForOnSuspendRequest(
+                onSuspend
+              ).unregister;
+            return unregister;
+          } catch (e) {}
+
+          try {
+            const suspendObservable = getSuspendObservable();
+
+            if (suspendObservable) {
+              const unregister = suspendObservable.observe_((change) => {
+                const { newValue: suspending } = change;
+                if (suspending) {
+                  onSuspend();
+                }
+              });
+              if (unregister) return unregister;
+            }
+          } catch (e) {}
+
+          try {
+            const unregisterOnSuspend =
+              SteamClient.User.RegisterForPrepareForSystemSuspendProgress(
+                onSuspend
+              ).unregister;
+            return unregisterOnSuspend;
+          } catch (e) {}
+        }
+      ).unregister;
+    }
 
     if (cfg.resume) {
       System.unregisterResume = (() => {
-        const CHECK_INTERVAL = 1000; // cada 1 segundo
-        const SLEEP_THRESHOLD = CHECK_INTERVAL * 2; // umbral de 2 segundos
-        let last = performance.now();
+        function onResume() {
+          EventBus.publishEvent(EventType.SUSPEND, new SuspendEventData(false));
+        }
 
-        const timer = setInterval(() => {
-          const now = performance.now();
-          const delta = now - last;
-          last = now;
+        try {
+          const unregister =
+            SteamClient.System.RegisterForOnResumeFromSuspend(
+              onResume
+            ).unregister;
+          return unregister;
+        } catch (e) {}
 
-          if (delta > CHECK_INTERVAL + SLEEP_THRESHOLD) {
-            const slept = Math.round(delta - CHECK_INTERVAL);
-            console.log(`💤 Detectada suspensión (~${slept} ms)`);
-            EventBus.publishEvent(
-              EventType.SUSPEND,
-              new SuspendEventData(false)
-            );
+        // try mobx resume observable
+        try {
+          const resumeObservable = getResumeObservable();
+
+          if (resumeObservable) {
+            const unregister = resumeObservable.observe_((change) => {
+              const { newValue } = change;
+
+              if (!newValue) {
+                return;
+              }
+
+              onResume();
+            });
+            if (unregister) return unregister;
           }
-        }, CHECK_INTERVAL);
+        } catch (e) {}
 
-        // devuelve lambda de desuscripción
-        return () => clearInterval(timer);
+        // fallback to a different path for resume if SteamClient.System option not available
+        try {
+          const unregisterOnResume =
+            SteamClient.User.RegisterForResumeSuspendedGamesProgress(
+              onResume
+            ).unregister;
+          return unregisterOnResume;
+        } catch (e) {}
       })();
     }
 
